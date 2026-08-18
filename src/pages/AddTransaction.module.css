@@ -40,6 +40,12 @@
   border-color: var(--primary);
 }
 
+.error {
+  color: var(--expense);
+  font-size: 0.8rem;
+  margin-top: -8px;
+}
+
 .typeGroup {
   display: flex;
   gap: 8px;
@@ -75,4 +81,10 @@
 
 .button:hover {
   background: var(--primary-hover);
+}
+
+@media (max-width: 480px) {
+  .box {
+    padding: 20px;
+  }
 }

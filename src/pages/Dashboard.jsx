@@ -1,8 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
-import Styles from './Dashboard.module.css'
 import { setLimit } from '../features/budget/budgetSlice'
 import { CATEGORIES } from '../constants/categories'
+import Styles from './Dashboard.module.css'
 
 export const Dashboard = () => {
   const transactions = useSelector((state) => state.budget.transactions)
@@ -31,6 +32,18 @@ export const Dashboard = () => {
     dispatch(setLimit({ category, limit: Number(value) }))
   }
 
+  if (transactions.length === 0) {
+    return (
+      <div className={Styles.wrapper}>
+        <h1 className={Styles.title}>Dashboard</h1>
+        <div className={Styles.emptyState}>
+          <p>No transactions yet — add one to see your totals here</p>
+          <Link to="/add" className={Styles.emptyLink}>Add your first transaction</Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={Styles.wrapper}>
       <h1 className={Styles.title}>Dashboard</h1>
@@ -50,33 +63,29 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      {transactions.length > 0 && (
-        <>
-          <h2 className={Styles.title}>Income vs Expenses</h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={90} label>
-                {pieData.map((entry, index) => (
-                  <Cell key={entry.name} fill={pieColors[index]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+      <h2 className={Styles.title}>Income vs Expenses</h2>
+      <ResponsiveContainer width="100%" height={250}>
+        <PieChart>
+          <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={90} label>
+            {pieData.map((entry, index) => (
+              <Cell key={entry.name} fill={pieColors[index]} />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </ResponsiveContainer>
 
-          {barData.length > 0 && (
-            <>
-              <h2 className={Styles.title}>Spending by Category</h2>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={barData}>
-                  <XAxis dataKey="category" stroke="#9a9aab" />
-                  <YAxis stroke="#9a9aab" />
-                  <Tooltip />
-                  <Bar dataKey="total" fill="#4f46e5" radius={[6, 6, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </>
-          )}
+      {barData.length > 0 && (
+        <>
+          <h2 className={Styles.title}>Spending by Category</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={barData}>
+              <XAxis dataKey="category" stroke="#9a9aab" />
+              <YAxis stroke="#9a9aab" />
+              <Tooltip />
+              <Bar dataKey="total" fill="#4f46e5" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </>
       )}
 

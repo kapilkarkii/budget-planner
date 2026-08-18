@@ -13,6 +13,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
+  margin-bottom: 32px;
 }
 
 .card {
@@ -88,4 +89,24 @@
   color: var(--text-muted);
   display: block;
   margin-top: 6px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.emptyLink {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
 }

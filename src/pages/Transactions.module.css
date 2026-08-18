@@ -4,6 +4,25 @@
   padding: 0 20px;
 }
 
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filters .input {
+  flex: 1;
+}
+
+.input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-light);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
 .list {
   list-style: none;
   padding: 0;
@@ -20,11 +39,14 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 12px 16px;
+  gap: 10px;
 }
 
 .info {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .category {
@@ -34,34 +56,11 @@
 
 .amount {
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .income { color: var(--income); }
 .expense { color: var(--expense); }
-
-.deleteBtn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  border-radius: 6px;
-  padding: 4px 10px;
-  cursor: pointer;
-}
-
-.deleteBtn:hover {
-  border-color: var(--expense);
-  color: var(--expense);
-}
-
-.filters {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.filters .input {
-  flex: 1;
-}
 
 .editBtn {
   background: none;
@@ -71,9 +70,48 @@
   padding: 4px 10px;
   text-decoration: none;
   font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .editBtn:hover {
   border-color: var(--primary);
   color: var(--text);
+}
+
+.deleteBtn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.deleteBtn:hover {
+  border-color: var(--expense);
+  color: var(--expense);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.emptyLink {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .item {
+    flex-wrap: wrap;
+  }
+  .filters {
+    flex-direction: column;
+  }
 }

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { deleteTransaction } from '../features/budget/budgetSlice'
 import { CATEGORIES } from '../constants/categories'
 import Styles from './Transactions.module.css'
-import { Link } from 'react-router-dom'
 
 export const Transactions = () => {
   const transactions = useSelector((state) => state.budget.transactions)
@@ -11,6 +11,18 @@ export const Transactions = () => {
 
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [typeFilter, setTypeFilter] = useState('all')
+
+  if (transactions.length === 0) {
+    return (
+      <div className={Styles.wrapper}>
+        <h1>Transactions</h1>
+        <div className={Styles.emptyState}>
+          <p>No transactions yet</p>
+          <Link to="/add" className={Styles.emptyLink}>Add your first transaction</Link>
+        </div>
+      </div>
+    )
+  }
 
   const filtered = transactions.filter((t) => {
     const matchesCategory = categoryFilter === 'all' || t.category === categoryFilter
@@ -38,7 +50,9 @@ export const Transactions = () => {
       </div>
 
       {filtered.length === 0 ? (
-        <h2>No transactions match</h2>
+        <div className={Styles.emptyState}>
+          <p>No transactions match these filters</p>
+        </div>
       ) : (
         <ul className={Styles.list}>
           {filtered.map((t) => (
