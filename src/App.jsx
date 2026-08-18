@@ -6,6 +6,7 @@ import { Transactions } from './pages/Transactions'
 import { AddTransaction } from './pages/AddTransaction'
 import { Reports } from './pages/Reports'
 import { Settings } from './pages/Settings'
+import { Goals } from './pages/Goals'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
       <Route path="/edit/:id" element={<AddTransaction/>}/> 
       <Route path="/reports" element={<Reports/>}/>
       <Route path="/settings" element={<Settings/>}/>
+      <Route path="/goals" element={<Goals/>}/>
    </Routes>
    </BrowserRouter>
   )

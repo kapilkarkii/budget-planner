@@ -12,4 +12,5 @@ store.subscribe(() => {
   localStorage.setItem('transactions', JSON.stringify(state.budget.transactions))
   localStorage.setItem('limits', JSON.stringify(state.budget.limits))
   localStorage.setItem('categories', JSON.stringify(state.budget.categories))
+  localStorage.setItem('goals', JSON.stringify(state.budget.goals))
 })

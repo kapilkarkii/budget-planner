@@ -1,0 +1,182 @@
+.wrapper {
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 0 20px 60px;
+  animation: fadeIn 0.25s ease;
+}
+
+.title {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--ink-muted);
+  font-size: 0.88rem;
+  margin-bottom: 24px;
+}
+
+.addForm {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.input {
+  flex: 2;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.inputSmall {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-size: 0.9rem;
+  min-width: 0;
+}
+
+.input:focus, .inputSmall:focus {
+  outline: none;
+  border-color: var(--income);
+}
+
+.addBtn {
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--income);
+  color: var(--paper);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.addBtn:hover {
+  background: var(--primary-hover);
+}
+
+.error {
+  display: block;
+  color: var(--expense);
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.goalsList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.goalCard {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.goalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.goalName {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.deleteBtn:hover {
+  color: var(--expense);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--rule);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.goalMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.goalAmounts {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.goalPercent {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.contributeRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.contributeInput {
+  flex: 1;
+  padding: 7px 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.85rem;
+}
+
+.contributeBtn {
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--income);
+  background: transparent;
+  color: var(--income);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.contributeBtn:hover {
+  background: var(--income);
+  color: var(--paper);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink-muted);
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius);
+  margin-top: 20px;
+}

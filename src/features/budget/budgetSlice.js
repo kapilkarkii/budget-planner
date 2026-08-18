@@ -38,10 +38,20 @@ const loadCategories = () => {
   }
 }
 
+const loadGoals = () => {
+  try {
+    const saved = localStorage.getItem('goals')
+    return saved ? JSON.parse(saved) : []
+  } catch {
+    return []
+  }
+}
+
 const initialState = {
   transactions: loadTransactions(),
   limits: loadLimits(),
   categories: loadCategories(),
+  goals: loadGoals(),
 }
 
 const budgetSlice = createSlice({
@@ -70,6 +80,21 @@ const budgetSlice = createSlice({
     deleteCategory: (state, action) => {
       state.categories = state.categories.filter((c) => c !== action.payload)
     },
+    addGoal: (state, action) => {
+      state.goals.push({
+        id: Date.now(),
+        name: action.payload.name,
+        target: action.payload.target,
+        saved: 0,
+      })
+    },
+    deleteGoal: (state, action) => {
+      state.goals = state.goals.filter((g) => g.id !== action.payload)
+    },
+    contributeToGoal: (state, action) => {
+      const goal = state.goals.find((g) => g.id === action.payload.id)
+      if (goal) goal.saved += action.payload.amount
+    },
   },
 })
 
@@ -80,5 +105,8 @@ export const {
   setLimit,
   addCategory,
   deleteCategory,
+  addGoal,
+  deleteGoal,
+  contributeToGoal,
 } = budgetSlice.actions
 export default budgetSlice.reducer

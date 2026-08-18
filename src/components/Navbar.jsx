@@ -9,6 +9,7 @@ export const Navbar = () => {
     { to: '/transactions', label: 'Transactions' },
     { to: '/add', label: 'Add Transaction' },
     { to: '/reports', label: 'Reports' },
+    { to: '/goals', label: 'Goals' },
     { to: '/settings', label: 'Settings' },
   ]
 
