@@ -1,27 +1,76 @@
 .nav {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  background: var(--paper-raised);
+  border-bottom: 2px solid var(--ink);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
   gap: 8px;
-  padding: 16px 24px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.brandMark {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--income);
+  border: 1.5px solid var(--income);
+  border-radius: var(--radius);
+  padding: 1px 6px;
+}
+
+.links {
+  display: flex;
+  gap: 4px;
 }
 
 .link {
-  padding: 8px 16px;
-  border-radius: 8px;
-  color: var(--text-muted);
+  position: relative;
+  padding: 7px 14px;
+  color: var(--ink-muted);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .link:hover {
-  color: var(--text);
-  background: var(--surface-light);
+  color: var(--ink);
 }
 
 .linkActive {
-  color: var(--text);
-  background: var(--primary);
+  color: var(--ink);
+}
+
+.linkActive::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background: var(--income);
+}
+
+@media (max-width: 600px) {
+  .nav {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+  .links {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }

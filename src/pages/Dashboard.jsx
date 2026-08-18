@@ -3,14 +3,25 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { setLimit } from '../features/budget/budgetSlice'
-import { CATEGORIES } from '../constants/categories'
 import Styles from './Dashboard.module.css'
 
 const currentMonth = () => new Date().toISOString().slice(0, 7)
 
+const tooltipStyle = {
+  contentStyle: {
+    background: '#FFFDF8',
+    border: '1px solid #1F1B16',
+    borderRadius: 4,
+    fontFamily: 'IBM Plex Mono, monospace',
+    fontSize: 13,
+  },
+  labelStyle: { color: '#1F1B16', fontWeight: 600 },
+}
+
 export const Dashboard = () => {
   const allTransactions = useSelector((state) => state.budget.transactions)
   const limits = useSelector((state) => state.budget.limits)
+  const categories = useSelector((state) => state.budget.categories)
   const dispatch = useDispatch()
 
   const [month, setMonth] = useState(currentMonth())
@@ -28,7 +39,7 @@ export const Dashboard = () => {
     { name: 'Income', value: income },
     { name: 'Expenses', value: expenses },
   ]
-  const pieColors = ['#22c55e', '#ef4444']
+  const pieColors = ['#1B4332', '#B33A3A']
 
   const categoryTotals = {}
   transactions
@@ -46,8 +57,9 @@ export const Dashboard = () => {
     return (
       <div className={Styles.wrapper}>
         <h1 className={Styles.title}>Dashboard</h1>
+        <p className={Styles.subtitle}>Your ledger at a glance</p>
         <div className={Styles.emptyState}>
-          <p>No transactions yet — add one to see your totals here</p>
+          <p>No entries yet — the ledger is blank</p>
           <Link to="/add" className={Styles.emptyLink}>Add your first transaction</Link>
         </div>
       </div>
@@ -57,6 +69,7 @@ export const Dashboard = () => {
   return (
     <div className={Styles.wrapper}>
       <h1 className={Styles.title}>Dashboard</h1>
+      <p className={Styles.subtitle}>Your ledger at a glance</p>
 
       <div className={Styles.monthBar}>
         <input
@@ -77,7 +90,7 @@ export const Dashboard = () => {
 
       {transactions.length === 0 ? (
         <div className={Styles.emptyState}>
-          <p>No transactions in this month</p>
+          <p>No entries for this month</p>
         </div>
       ) : (
         <>
@@ -96,27 +109,27 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          <h2 className={Styles.title}>Income vs Expenses</h2>
-          <ResponsiveContainer width="100%" height={250}>
+          <h2 className={Styles.sectionTitle}>Income vs Expenses</h2>
+          <ResponsiveContainer width="100%" height={230}>
             <PieChart>
-              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={90} label>
+              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={85} label>
                 {pieData.map((entry, index) => (
-                  <Cell key={entry.name} fill={pieColors[index]} />
+                  <Cell key={entry.name} fill={pieColors[index]} stroke="#F7F3EA" strokeWidth={2} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip {...tooltipStyle} />
             </PieChart>
           </ResponsiveContainer>
 
           {barData.length > 0 && (
             <>
-              <h2 className={Styles.title}>Spending by Category</h2>
-              <ResponsiveContainer width="100%" height={250}>
+              <h2 className={Styles.sectionTitle}>Spending by Category</h2>
+              <ResponsiveContainer width="100%" height={230}>
                 <BarChart data={barData}>
-                  <XAxis dataKey="category" stroke="#9a9aab" />
-                  <YAxis stroke="#9a9aab" />
-                  <Tooltip />
-                  <Bar dataKey="total" fill="#4f46e5" radius={[6, 6, 0, 0]} />
+                  <XAxis dataKey="category" stroke="#837C6D" fontSize={12} />
+                  <YAxis stroke="#837C6D" fontSize={12} />
+                  <Tooltip {...tooltipStyle} />
+                  <Bar dataKey="total" fill="#1B4332" radius={[3, 3, 0, 0]} background={false} />
                 </BarChart>
               </ResponsiveContainer>
             </>
@@ -124,9 +137,9 @@ export const Dashboard = () => {
         </>
       )}
 
-      <h2 className={Styles.title}>Budget Limits</h2>
+      <h2 className={Styles.sectionTitle}>Budget Limits</h2>
       <div className={Styles.limitsList}>
-        {CATEGORIES.map((cat) => {
+        {categories.map((cat) => {
           const spent = categoryTotals[cat] || 0
           const limit = limits[cat] || 0
           const percent = limit > 0 ? Math.min((spent / limit) * 100, 100) : 0
@@ -139,7 +152,7 @@ export const Dashboard = () => {
                 <input
                   className={Styles.limitInput}
                   type="number"
-                  placeholder="Set limit"
+                  placeholder="limit"
                   value={limits[cat] || ''}
                   onChange={(e) => handleSetLimit(cat, e.target.value)}
                 />
@@ -151,7 +164,7 @@ export const Dashboard = () => {
                       className={Styles.progressFill}
                       style={{
                         width: `${percent}%`,
-                        background: over ? 'var(--expense)' : 'var(--primary)',
+                        background: over ? 'var(--expense)' : 'var(--income)',
                       }}
                     />
                   </div>

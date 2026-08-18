@@ -1,48 +1,59 @@
 .wrapper {
-  max-width: 420px;
+  max-width: 440px;
   margin: 40px auto;
-  padding: 0 20px;
+  padding: 0 20px 60px;
+  animation: fadeIn 0.25s ease;
 }
 
 .box {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
   border-radius: var(--radius);
-  padding: 28px;
+  padding: 30px 28px;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
 .title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 4px 0;
+  font-size: 1.4rem;
+  margin: 0 0 2px 0;
+}
+
+.subtitle {
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  margin: 0 0 14px 0;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--rule);
 }
 
 .label {
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
   margin-bottom: -8px;
 }
 
 .input {
   padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--surface-light);
-  color: var(--text);
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
   font-size: 0.95rem;
+  font-family: var(--font-body);
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: var(--income);
 }
 
 .error {
   color: var(--expense);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   margin-top: -8px;
 }
 
@@ -54,27 +65,29 @@
 .typeBtn {
   flex: 1;
   padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--surface-light);
-  color: var(--text-muted);
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink-muted);
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .typeBtnActive {
-  border-color: var(--primary);
-  color: var(--text);
-  background: var(--primary);
+  border-color: var(--income);
+  color: var(--paper);
+  background: var(--income);
 }
 
 .button {
   padding: 12px;
-  border-radius: 8px;
+  border-radius: var(--radius);
   border: none;
-  background: var(--primary);
-  color: white;
+  background: var(--income);
+  color: var(--paper);
   font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
   margin-top: 8px;
 }
@@ -85,6 +98,6 @@
 
 @media (max-width: 480px) {
   .box {
-    padding: 20px;
+    padding: 22px 18px;
   }
 }

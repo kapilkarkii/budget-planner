@@ -1,5 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const DEFAULT_CATEGORIES = [
+  'Food',
+  'Transport',
+  'Rent',
+  'Utilities',
+  'Entertainment',
+  'Shopping',
+  'Salary',
+  'Other',
+]
+
 const loadTransactions = () => {
   try {
     const saved = localStorage.getItem('transactions')
@@ -18,9 +29,19 @@ const loadLimits = () => {
   }
 }
 
+const loadCategories = () => {
+  try {
+    const saved = localStorage.getItem('categories')
+    return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES
+  } catch {
+    return DEFAULT_CATEGORIES
+  }
+}
+
 const initialState = {
   transactions: loadTransactions(),
   limits: loadLimits(),
+  categories: loadCategories(),
 }
 
 const budgetSlice = createSlice({
@@ -40,8 +61,24 @@ const budgetSlice = createSlice({
     setLimit: (state, action) => {
       state.limits[action.payload.category] = action.payload.limit
     },
+    addCategory: (state, action) => {
+      const name = action.payload.trim()
+      if (name && !state.categories.includes(name)) {
+        state.categories.push(name)
+      }
+    },
+    deleteCategory: (state, action) => {
+      state.categories = state.categories.filter((c) => c !== action.payload)
+    },
   },
 })
 
-export const { addTransaction, deleteTransaction, updateTransaction, setLimit } = budgetSlice.actions
+export const {
+  addTransaction,
+  deleteTransaction,
+  updateTransaction,
+  setLimit,
+  addCategory,
+  deleteCategory,
+} = budgetSlice.actions
 export default budgetSlice.reducer

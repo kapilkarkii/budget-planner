@@ -1,37 +1,92 @@
 .wrapper {
-  max-width: 500px;
+  max-width: 560px;
   margin: 40px auto;
-  padding: 0 20px;
+  padding: 0 20px 60px;
+  animation: fadeIn 0.25s ease;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--ink-muted);
+  font-size: 0.88rem;
   margin-bottom: 24px;
+}
+
+.monthBar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.monthInput {
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.monthInput:disabled {
+  opacity: 0.5;
+}
+
+.allTimeBtn {
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.allTimeBtnActive {
+  border-color: var(--income);
+  background: var(--income);
+  color: var(--paper);
 }
 
 .cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
   margin-bottom: 32px;
+  background: var(--paper-raised);
 }
 
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
+  padding: 16px 12px;
   text-align: center;
+  border-right: 1px solid var(--rule);
+}
+
+.card:last-child {
+  border-right: none;
 }
 
 .label {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  margin: 0 0 6px 0;
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px 0;
 }
 
 .value {
-  font-size: 1.4rem;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.3rem;
   font-weight: 600;
   margin: 0;
 }
@@ -39,16 +94,22 @@
 .income { color: var(--income); }
 .expense { color: var(--expense); }
 
+.sectionTitle {
+  font-size: 1.05rem;
+  margin: 32px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+
 .limitsList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 12px;
+  gap: 14px;
 }
 
 .limitRow {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
   border-radius: var(--radius);
   padding: 14px 16px;
 }
@@ -58,35 +119,39 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .limitInput {
-  width: 100px;
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--surface-light);
-  color: var(--text);
-  font-size: 0.85rem;
+  width: 90px;
+  padding: 5px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  text-align: right;
 }
 
 .progressTrack {
   width: 100%;
-  height: 8px;
-  border-radius: 4px;
-  background: var(--surface-light);
+  height: 6px;
+  border-radius: 3px;
+  background: var(--rule);
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  border-radius: 4px;
   transition: width 0.3s ease;
 }
 
 .limitText {
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-muted);
   display: block;
   margin-top: 6px;
 }
@@ -94,56 +159,33 @@
 .emptyState {
   text-align: center;
   padding: 60px 20px;
-  color: var(--text-muted);
+  color: var(--ink-muted);
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius);
 }
 
 .emptyLink {
   display: inline-block;
   margin-top: 12px;
-  color: var(--primary);
+  color: var(--income);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  border-bottom: 1px solid var(--income);
+}
+
+:global(.recharts-bar-background-rectangle) {
+  fill: transparent !important;
 }
 
 @media (max-width: 480px) {
   .cards {
     grid-template-columns: 1fr;
   }
-}
-
-.monthBar {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.monthInput {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--surface-light);
-  color: var(--text);
-  font-size: 0.9rem;
-}
-
-.monthInput:disabled {
-  opacity: 0.5;
-}
-
-.allTimeBtn {
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--surface-light);
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.allTimeBtnActive {
-  border-color: var(--primary);
-  background: var(--primary);
-  color: white;
+  .card {
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+  }
+  .card:last-child {
+    border-bottom: none;
+  }
 }

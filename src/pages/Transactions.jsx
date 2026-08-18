@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { deleteTransaction } from '../features/budget/budgetSlice'
-import { CATEGORIES } from '../constants/categories'
 import Styles from './Transactions.module.css'
 
 export const Transactions = () => {
   const transactions = useSelector((state) => state.budget.transactions)
+  const categories = useSelector((state) => state.budget.categories)
   const dispatch = useDispatch()
 
   const [categoryFilter, setCategoryFilter] = useState('all')
@@ -17,9 +17,10 @@ export const Transactions = () => {
   if (transactions.length === 0) {
     return (
       <div className={Styles.wrapper}>
-        <h1>Transactions</h1>
+        <h1 className={Styles.title}>Transactions</h1>
+        <p className={Styles.subtitle}>Every entry, in order</p>
         <div className={Styles.emptyState}>
-          <p>No transactions yet</p>
+          <p>The ledger is empty</p>
           <Link to="/add" className={Styles.emptyLink}>Add your first transaction</Link>
         </div>
       </div>
@@ -44,7 +45,8 @@ export const Transactions = () => {
 
   return (
     <div className={Styles.wrapper}>
-      <h1>Transactions</h1>
+      <h1 className={Styles.title}>Transactions</h1>
+      <p className={Styles.subtitle}>Every entry, in order</p>
 
       <input
         className={Styles.searchInput}
@@ -63,7 +65,7 @@ export const Transactions = () => {
 
         <select className={Styles.input} value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
           <option value="all">All Categories</option>
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
@@ -79,24 +81,31 @@ export const Transactions = () => {
 
       {sorted.length === 0 ? (
         <div className={Styles.emptyState}>
-          <p>No transactions match your search/filters</p>
+          <p>No entries match your search or filters</p>
         </div>
       ) : (
-        <ul className={Styles.list}>
-          {sorted.map((t) => (
-            <li key={t.id} className={Styles.item}>
-              <div className={Styles.info}>
-                <span>{t.title}</span>
-                <span className={Styles.category}>{t.category} · {t.date}</span>
-              </div>
-              <span className={`${Styles.amount} ${Styles[t.type]}`}>
-                {t.type === 'expense' ? '-' : '+'}{t.amount}
-              </span>
-              <Link to={`/edit/${t.id}`} className={Styles.editBtn}>Edit</Link>
-              <button className={Styles.deleteBtn} onClick={() => dispatch(deleteTransaction(t.id))}>Delete</button>
-            </li>
-          ))}
-        </ul>
+        <div className={Styles.receipt}>
+          <ul className={Styles.list}>
+            {sorted.map((t) => (
+              <li key={t.id} className={Styles.item}>
+                <span className={Styles.itemTitle}>{t.title}</span>
+                <span className={Styles.leader}></span>
+                <span className={`${Styles.amount} ${Styles[t.type]}`}>
+                  {t.type === 'expense' ? '-' : '+'}{t.amount}
+                </span>
+                <span className={Styles.meta}>
+                  <span className={Styles.category}>{t.category}</span>
+                  <span className={Styles.date}>{t.date}</span>
+                </span>
+                <span className={Styles.actions}>
+                  <Link to={`/edit/${t.id}`} className={Styles.editBtn}>edit</Link>
+                  <button className={Styles.deleteBtn} onClick={() => dispatch(deleteTransaction(t.id))}>delete</button>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div className="tornEdge"></div>
+        </div>
       )}
     </div>
   )
