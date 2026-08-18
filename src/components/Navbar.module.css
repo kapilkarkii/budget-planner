@@ -1,15 +1,27 @@
-nav {
+.nav {
   display: flex;
-  gap: 20px;
-  padding: 16px;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 
-nav a {
-  color: white;
+.link {
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: var(--text-muted);
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.9rem;
 }
 
-nav a:hover {
-  text-decoration: underline;
+.link:hover {
+  color: var(--text);
+  background: var(--surface-light);
+}
+
+.linkActive {
+  color: var(--text);
+  background: var(--primary);
 }

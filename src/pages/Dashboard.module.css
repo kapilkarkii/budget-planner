@@ -1,0 +1,39 @@
+.wrapper {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.title {
+  font-size: 1.75rem;
+  margin-bottom: 24px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+
+.label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0 0 6px 0;
+}
+
+.value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.income { color: var(--income); }
+.expense { color: var(--expense); }

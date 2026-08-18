@@ -14,6 +14,7 @@ function App() {
       <Route path="/" element={<Dashboard/>}/>
       <Route path="/transactions" element={<Transactions/>}/>
       <Route path="/add" element={<AddTransaction/>}/>
+      <Route path="/edit/:id" element={<AddTransaction/>}/> 
    </Routes>
    </BrowserRouter>
   )
