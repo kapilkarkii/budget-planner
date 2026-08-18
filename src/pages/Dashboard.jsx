@@ -1,7 +1,7 @@
-import React from 'react'
+import { useSelector } from 'react-redux'
 
 export const Dashboard = () => {
-  return (
-    <div>Dashboard</div>
-  )
+  const transactions = useSelector((state) => state.budget.transactions)
+  console.log(transactions)
+  return <h1>Dashboard</h1>
 }
