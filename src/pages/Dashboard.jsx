@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
@@ -5,10 +6,19 @@ import { setLimit } from '../features/budget/budgetSlice'
 import { CATEGORIES } from '../constants/categories'
 import Styles from './Dashboard.module.css'
 
+const currentMonth = () => new Date().toISOString().slice(0, 7)
+
 export const Dashboard = () => {
-  const transactions = useSelector((state) => state.budget.transactions)
+  const allTransactions = useSelector((state) => state.budget.transactions)
   const limits = useSelector((state) => state.budget.limits)
   const dispatch = useDispatch()
+
+  const [month, setMonth] = useState(currentMonth())
+  const [showAll, setShowAll] = useState(false)
+
+  const transactions = showAll
+    ? allTransactions
+    : allTransactions.filter((t) => t.date && t.date.startsWith(month))
 
   const income = transactions.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0)
   const expenses = transactions.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)
@@ -32,7 +42,7 @@ export const Dashboard = () => {
     dispatch(setLimit({ category, limit: Number(value) }))
   }
 
-  if (transactions.length === 0) {
+  if (allTransactions.length === 0) {
     return (
       <div className={Styles.wrapper}>
         <h1 className={Styles.title}>Dashboard</h1>
@@ -48,44 +58,69 @@ export const Dashboard = () => {
     <div className={Styles.wrapper}>
       <h1 className={Styles.title}>Dashboard</h1>
 
-      <div className={Styles.cards}>
-        <div className={Styles.card}>
-          <p className={Styles.label}>Income</p>
-          <p className={`${Styles.value} ${Styles.income}`}>{income}</p>
-        </div>
-        <div className={Styles.card}>
-          <p className={Styles.label}>Expenses</p>
-          <p className={`${Styles.value} ${Styles.expense}`}>{expenses}</p>
-        </div>
-        <div className={Styles.card}>
-          <p className={Styles.label}>Balance</p>
-          <p className={Styles.value}>{balance}</p>
-        </div>
+      <div className={Styles.monthBar}>
+        <input
+          className={Styles.monthInput}
+          type="month"
+          value={month}
+          onChange={(e) => { setMonth(e.target.value); setShowAll(false) }}
+          disabled={showAll}
+        />
+        <button
+          type="button"
+          className={`${Styles.allTimeBtn} ${showAll ? Styles.allTimeBtnActive : ''}`}
+          onClick={() => setShowAll(!showAll)}
+        >
+          All Time
+        </button>
       </div>
 
-      <h2 className={Styles.title}>Income vs Expenses</h2>
-      <ResponsiveContainer width="100%" height={250}>
-        <PieChart>
-          <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={90} label>
-            {pieData.map((entry, index) => (
-              <Cell key={entry.name} fill={pieColors[index]} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </ResponsiveContainer>
-
-      {barData.length > 0 && (
+      {transactions.length === 0 ? (
+        <div className={Styles.emptyState}>
+          <p>No transactions in this month</p>
+        </div>
+      ) : (
         <>
-          <h2 className={Styles.title}>Spending by Category</h2>
+          <div className={Styles.cards}>
+            <div className={Styles.card}>
+              <p className={Styles.label}>Income</p>
+              <p className={`${Styles.value} ${Styles.income}`}>{income}</p>
+            </div>
+            <div className={Styles.card}>
+              <p className={Styles.label}>Expenses</p>
+              <p className={`${Styles.value} ${Styles.expense}`}>{expenses}</p>
+            </div>
+            <div className={Styles.card}>
+              <p className={Styles.label}>Balance</p>
+              <p className={Styles.value}>{balance}</p>
+            </div>
+          </div>
+
+          <h2 className={Styles.title}>Income vs Expenses</h2>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={barData}>
-              <XAxis dataKey="category" stroke="#9a9aab" />
-              <YAxis stroke="#9a9aab" />
+            <PieChart>
+              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={90} label>
+                {pieData.map((entry, index) => (
+                  <Cell key={entry.name} fill={pieColors[index]} />
+                ))}
+              </Pie>
               <Tooltip />
-              <Bar dataKey="total" fill="#4f46e5" radius={[6, 6, 0, 0]} />
-            </BarChart>
+            </PieChart>
           </ResponsiveContainer>
+
+          {barData.length > 0 && (
+            <>
+              <h2 className={Styles.title}>Spending by Category</h2>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={barData}>
+                  <XAxis dataKey="category" stroke="#9a9aab" />
+                  <YAxis stroke="#9a9aab" />
+                  <Tooltip />
+                  <Bar dataKey="total" fill="#4f46e5" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </>
+          )}
         </>
       )}
 

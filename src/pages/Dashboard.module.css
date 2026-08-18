@@ -110,3 +110,40 @@
     grid-template-columns: 1fr;
   }
 }
+
+.monthBar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.monthInput {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-light);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.monthInput:disabled {
+  opacity: 0.5;
+}
+
+.allTimeBtn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-light);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.allTimeBtnActive {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+}
