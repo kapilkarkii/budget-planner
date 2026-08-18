@@ -9,8 +9,18 @@ const loadTransactions = () => {
   }
 }
 
+const loadLimits = () => {
+  try {
+    const saved = localStorage.getItem('limits')
+    return saved ? JSON.parse(saved) : {}
+  } catch {
+    return {}
+  }
+}
+
 const initialState = {
   transactions: loadTransactions(),
+  limits: loadLimits(),
 }
 
 const budgetSlice = createSlice({
@@ -21,18 +31,17 @@ const budgetSlice = createSlice({
       state.transactions.push(action.payload)
     },
     deleteTransaction: (state, action) => {
-      state.transactions = state.transactions.filter(
-        (t) => t.id !== action.payload
-      )
+      state.transactions = state.transactions.filter((t) => t.id !== action.payload)
     },
     updateTransaction: (state, action) => {
       const index = state.transactions.findIndex((t) => t.id === action.payload.id)
-      if (index !== -1) {
-        state.transactions[index] = action.payload
-      }
+      if (index !== -1) state.transactions[index] = action.payload
+    },
+    setLimit: (state, action) => {
+      state.limits[action.payload.category] = action.payload.limit
     },
   },
 })
 
-export const { addTransaction, deleteTransaction, updateTransaction } = budgetSlice.actions
+export const { addTransaction, deleteTransaction, updateTransaction, setLimit } = budgetSlice.actions
 export default budgetSlice.reducer

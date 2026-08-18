@@ -1,9 +1,13 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import Styles from './Dashboard.module.css'
+import { setLimit } from '../features/budget/budgetSlice'
+import { CATEGORIES } from '../constants/categories'
 
 export const Dashboard = () => {
   const transactions = useSelector((state) => state.budget.transactions)
+  const limits = useSelector((state) => state.budget.limits)
+  const dispatch = useDispatch()
 
   const income = transactions.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0)
   const expenses = transactions.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)
@@ -22,6 +26,10 @@ export const Dashboard = () => {
       categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount
     })
   const barData = Object.entries(categoryTotals).map(([category, total]) => ({ category, total }))
+
+  const handleSetLimit = (category, value) => {
+    dispatch(setLimit({ category, limit: Number(value) }))
+  }
 
   return (
     <div className={Styles.wrapper}>
@@ -71,6 +79,47 @@ export const Dashboard = () => {
           )}
         </>
       )}
+
+      <h2 className={Styles.title}>Budget Limits</h2>
+      <div className={Styles.limitsList}>
+        {CATEGORIES.map((cat) => {
+          const spent = categoryTotals[cat] || 0
+          const limit = limits[cat] || 0
+          const percent = limit > 0 ? Math.min((spent / limit) * 100, 100) : 0
+          const over = limit > 0 && spent > limit
+
+          return (
+            <div key={cat} className={Styles.limitRow}>
+              <div className={Styles.limitHeader}>
+                <span>{cat}</span>
+                <input
+                  className={Styles.limitInput}
+                  type="number"
+                  placeholder="Set limit"
+                  value={limits[cat] || ''}
+                  onChange={(e) => handleSetLimit(cat, e.target.value)}
+                />
+              </div>
+              {limit > 0 && (
+                <>
+                  <div className={Styles.progressTrack}>
+                    <div
+                      className={Styles.progressFill}
+                      style={{
+                        width: `${percent}%`,
+                        background: over ? 'var(--expense)' : 'var(--primary)',
+                      }}
+                    />
+                  </div>
+                  <span className={Styles.limitText}>
+                    {spent} / {limit} {over && '— over budget'}
+                  </span>
+                </>
+              )}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

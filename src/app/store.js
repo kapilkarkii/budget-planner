@@ -10,4 +10,5 @@ export const store = configureStore({
 store.subscribe(() => {
   const state = store.getState()
   localStorage.setItem('transactions', JSON.stringify(state.budget.transactions))
+  localStorage.setItem('limits', JSON.stringify(state.budget.limits))
 })
