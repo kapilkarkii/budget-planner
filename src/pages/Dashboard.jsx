@@ -66,6 +66,57 @@ export const Dashboard = () => {
     )
   }
 
+  const allExpenseCategories = {}
+  allTransactions.filter((t) => t.type === 'expense' && t.date).forEach((t) => {
+    const key = t.date.slice(0, 7)
+    if (!allExpenseCategories[key]) allExpenseCategories[key] = {}
+    allExpenseCategories[key][t.category] = (allExpenseCategories[key][t.category] || 0) + t.amount
+  })
+
+  const prevMonthKey = (() => {
+    const [y, m] = month.split('-').map(Number)
+    const d = new Date(y, m - 2, 1)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+  })()
+  const prevMonthCategories = allExpenseCategories[prevMonthKey] || {}
+
+  const savingsRate = income > 0 ? Math.round(((income - expenses) / income) * 100) : null
+
+  const overBudgetCategories = categories.filter((cat) => {
+    const limit = limits[cat] || 0
+    const spent = categoryTotals[cat] || 0
+    return limit > 0 && spent > limit
+  })
+
+  const risingCategories = Object.entries(categoryTotals)
+    .filter(([cat, total]) => {
+      const prev = prevMonthCategories[cat] || 0
+      return prev > 0 && total > prev * 1.2
+    })
+    .map(([cat]) => cat)
+
+  let healthScore = 60
+  if (savingsRate !== null) healthScore += Math.min(Math.max(savingsRate, -30), 30)
+  healthScore -= overBudgetCategories.length * 10
+  healthScore -= risingCategories.length * 5
+  healthScore = Math.max(0, Math.min(100, Math.round(healthScore)))
+
+  const feedback = []
+  if (savingsRate !== null) {
+    if (savingsRate >= 20) feedback.push({ tone: 'good', text: `You're saving ${savingsRate}% of your income this month — solid.` })
+    else if (savingsRate >= 0) feedback.push({ tone: 'neutral', text: `You saved ${savingsRate}% of your income this month.` })
+    else feedback.push({ tone: 'bad', text: `You spent more than you earned this month, by ${Math.abs(income - expenses)}.` })
+  }
+  overBudgetCategories.forEach((cat) => {
+    feedback.push({ tone: 'bad', text: `${cat} is over its budget limit this month.` })
+  })
+  risingCategories.forEach((cat) => {
+    feedback.push({ tone: 'warn', text: `${cat} spending is up noticeably from last month.` })
+  })
+  if (feedback.length === 0) {
+    feedback.push({ tone: 'good', text: 'Nothing unusual this month — steady as it goes.' })
+  }
+
   return (
     <div className={Styles.wrapper}>
       <h1 className={Styles.title}>Dashboard</h1>
@@ -87,6 +138,25 @@ export const Dashboard = () => {
           All Time
         </button>
       </div>
+
+      {transactions.length > 0 && (
+      <div className={Styles.healthCard}>
+        <div className={Styles.healthScoreRow}>
+          <div>
+            <p className={Styles.healthLabel}>Financial Health Score</p>
+            <p className={Styles.healthScore}>{healthScore}<span className={Styles.healthScoreMax}>/100</span></p>
+          </div>
+          <div className={Styles.healthBar}>
+            <div className={Styles.healthBarFill} style={{ width: `${healthScore}%` }} />
+          </div>
+        </div>
+        <ul className={Styles.feedbackList}>
+          {feedback.map((f, i) => (
+            <li key={i} className={`${Styles.feedbackItem} ${Styles[f.tone]}`}>{f.text}</li>
+          ))}
+        </ul>
+      </div>
+)}
 
       {transactions.length === 0 ? (
         <div className={Styles.emptyState}>

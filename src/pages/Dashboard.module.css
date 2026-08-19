@@ -189,3 +189,92 @@
     border-bottom: none;
   }
 }
+
+.healthCard {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 28px;
+}
+
+.healthScoreRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.healthLabel {
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 4px 0;
+}
+
+.healthScore {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.healthScoreMax {
+  font-size: 1rem;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+.healthBar {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--rule);
+  overflow: hidden;
+}
+
+.healthBarFill {
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+
+.feedbackList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feedbackItem {
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border-left: 3px solid var(--rule);
+}
+
+.good {
+  background: var(--income-soft);
+  border-left-color: var(--income);
+  color: var(--income);
+}
+
+.warn {
+  background: #FBF3DD;
+  border-left-color: var(--gold);
+  color: #8a6d1a;
+}
+
+.bad {
+  background: var(--expense-soft);
+  border-left-color: var(--expense);
+  color: var(--expense);
+}
+
+.neutral {
+  background: var(--paper);
+  color: var(--ink-muted);
+}
