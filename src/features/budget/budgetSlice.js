@@ -95,6 +95,12 @@ const budgetSlice = createSlice({
       const goal = state.goals.find((g) => g.id === action.payload.id)
       if (goal) goal.saved += action.payload.amount
     },
+    withdrawFromGoal: (state, action) => {
+      const goal = state.goals.find((g) => g.id === action.payload.id)
+      if (goal) {
+        goal.saved = Math.max(0, goal.saved - action.payload.amount)
+      }
+    },
   },
 })
 
@@ -108,5 +114,6 @@ export const {
   addGoal,
   deleteGoal,
   contributeToGoal,
+  withdrawFromGoal,
 } = budgetSlice.actions
 export default budgetSlice.reducer

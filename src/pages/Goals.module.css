@@ -20,10 +20,12 @@
   display: flex;
   gap: 8px;
   margin-bottom: 6px;
+  flex-wrap: wrap;
 }
 
 .input {
   flex: 2;
+  min-width: 160px;
   padding: 10px 12px;
   border-radius: var(--radius);
   border: 1px solid var(--rule);
@@ -34,13 +36,13 @@
 
 .inputSmall {
   flex: 1;
+  min-width: 90px;
   padding: 10px 12px;
   border-radius: var(--radius);
   border: 1px solid var(--rule);
   background: var(--paper-raised);
   color: var(--ink);
   font-size: 0.9rem;
-  min-width: 0;
 }
 
 .input:focus, .inputSmall:focus {
@@ -144,10 +146,12 @@
   display: flex;
   gap: 8px;
   margin-top: 12px;
+  flex-wrap: wrap;
 }
 
 .contributeInput {
   flex: 1;
+  min-width: 90px;
   padding: 7px 10px;
   border-radius: var(--radius);
   border: 1px solid var(--rule);
@@ -169,6 +173,22 @@
 
 .contributeBtn:hover {
   background: var(--income);
+  color: var(--paper);
+}
+
+.withdrawBtn {
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--expense);
+  background: transparent;
+  color: var(--expense);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.withdrawBtn:hover {
+  background: var(--expense);
   color: var(--paper);
 }
 

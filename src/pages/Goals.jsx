@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addGoal, deleteGoal, contributeToGoal } from '../features/budget/budgetSlice'
+import { addGoal, deleteGoal, contributeToGoal, withdrawFromGoal } from '../features/budget/budgetSlice'
 import Styles from './Goals.module.css'
 
 export const Goals = () => {
@@ -32,6 +32,13 @@ export const Goals = () => {
     const amount = Number(contributions[id])
     if (!amount || amount <= 0) return
     dispatch(contributeToGoal({ id, amount }))
+    setContributions((prev) => ({ ...prev, [id]: '' }))
+  }
+
+  const handleWithdraw = (id) => {
+    const amount = Number(contributions[id])
+    if (!amount || amount <= 0) return
+    dispatch(withdrawFromGoal({ id, amount }))
     setContributions((prev) => ({ ...prev, [id]: '' }))
   }
 
@@ -93,20 +100,21 @@ export const Goals = () => {
                   <span className={Styles.goalPercent}>{Math.round(percent)}%</span>
                 </div>
 
-                {!reached && (
-                  <div className={Styles.contributeRow}>
-                    <input
-                      className={Styles.contributeInput}
-                      type="number"
-                      placeholder="Add funds"
-                      value={contributions[goal.id] || ''}
-                      onChange={(e) => setContributions((prev) => ({ ...prev, [goal.id]: e.target.value }))}
-                    />
-                    <button className={Styles.contributeBtn} onClick={() => handleContribute(goal.id)}>
-                      Add
-                    </button>
-                  </div>
-                )}
+                <div className={Styles.contributeRow}>
+                  <input
+                    className={Styles.contributeInput}
+                    type="number"
+                    placeholder="Amount"
+                    value={contributions[goal.id] || ''}
+                    onChange={(e) => setContributions((prev) => ({ ...prev, [goal.id]: e.target.value }))}
+                  />
+                  <button className={Styles.contributeBtn} onClick={() => handleContribute(goal.id)}>
+                    Add
+                  </button>
+                  <button className={Styles.withdrawBtn} onClick={() => handleWithdraw(goal.id)}>
+                    Withdraw
+                  </button>
+                </div>
               </div>
             )
           })}
