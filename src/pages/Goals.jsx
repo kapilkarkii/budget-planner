@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addGoal, deleteGoal, contributeToGoal, withdrawFromGoal } from '../features/budget/budgetSlice'
 import Styles from './Goals.module.css'
 
+const goalIcons = ['flag', 'savings', 'flight', 'home', 'school', 'medical_services', 'redeem', 'directions_car']
+
 export const Goals = () => {
   const goals = useSelector((state) => state.budget.goals)
   const dispatch = useDispatch()
@@ -11,6 +13,7 @@ export const Goals = () => {
   const [target, setTarget] = useState('')
   const [error, setError] = useState('')
   const [contributions, setContributions] = useState({})
+  const [confirmId, setConfirmId] = useState(null)
 
   const handleAddGoal = (e) => {
     e.preventDefault()
@@ -42,12 +45,25 @@ export const Goals = () => {
     setContributions((prev) => ({ ...prev, [id]: '' }))
   }
 
+  const handleDelete = (id) => {
+    if (confirmId === id) {
+      dispatch(deleteGoal(id))
+      setConfirmId(null)
+    } else {
+      setConfirmId(id)
+    }
+  }
+
   return (
     <div className={Styles.wrapper}>
-      <h1 className={Styles.title}>Savings Goals</h1>
-      <p className={Styles.subtitle}>Set a target, chip away at it</p>
+      <div className={Styles.headerRow}>
+        <div>
+          <h1 className={Styles.pageTitle}>Savings Goals</h1>
+          <p className={Styles.pageSubtitle}>Track your progress and celebrate milestones.</p>
+        </div>
+      </div>
 
-      <form className={Styles.addForm} onSubmit={handleAddGoal}>
+      <form className={Styles.addCard} onSubmit={handleAddGoal}>
         <input
           className={Styles.input}
           type="text"
@@ -58,29 +74,42 @@ export const Goals = () => {
         <input
           className={Styles.inputSmall}
           type="number"
-          placeholder="Target"
+          placeholder="Target amount"
           value={target}
           onChange={(e) => { setTarget(e.target.value); setError('') }}
         />
-        <button className={Styles.addBtn} type="submit">Add Goal</button>
+        <button className={Styles.addBtn} type="submit">
+          <span className="icon">add</span>
+          Add Goal
+        </button>
       </form>
       {error && <span className={Styles.error}>{error}</span>}
 
       {goals.length === 0 ? (
         <div className={Styles.emptyState}>
-          <p>No savings goals yet — add one above</p>
+          <p>No savings goals yet — add one above to get started.</p>
         </div>
       ) : (
-        <div className={Styles.goalsList}>
-          {goals.map((goal) => {
+        <div className={Styles.goalsGrid}>
+          {goals.map((goal, i) => {
             const percent = Math.min((goal.saved / goal.target) * 100, 100)
             const reached = goal.saved >= goal.target
 
             return (
-              <div key={goal.id} className={Styles.goalCard}>
+              <div key={goal.id} className={`${Styles.goalCard} ${reached ? Styles.goalCardReached : ''}`}>
                 <div className={Styles.goalHeader}>
-                  <span className={Styles.goalName}>{goal.name}</span>
-                  <button className={Styles.deleteBtn} onClick={() => dispatch(deleteGoal(goal.id))}>remove</button>
+                  <span className={`icon ${Styles.goalIcon}`}>{goalIcons[i % goalIcons.length]}</span>
+                  <div className={Styles.goalHeaderText}>
+                    <span className={Styles.goalName}>{goal.name}</span>
+                    {reached && <span className={Styles.reachedTag}>Goal reached</span>}
+                  </div>
+                  <button
+                    className={`${Styles.deleteBtn} ${confirmId === goal.id ? Styles.confirmDelete : ''}`}
+                    onClick={() => handleDelete(goal.id)}
+                    aria-label={confirmId === goal.id ? `Confirm delete ${goal.name}` : `Delete ${goal.name}`}
+                  >
+                    <span className="icon">{confirmId === goal.id ? 'check' : 'close'}</span>
+                  </button>
                 </div>
 
                 <div className={Styles.progressTrack}>
@@ -88,15 +117,13 @@ export const Goals = () => {
                     className={Styles.progressFill}
                     style={{
                       width: `${percent}%`,
-                      background: reached ? 'var(--gold)' : 'var(--income)',
+                      background: reached ? 'var(--warn)' : 'var(--secondary)',
                     }}
                   />
                 </div>
 
                 <div className={Styles.goalMeta}>
-                  <span className={Styles.goalAmounts}>
-                    {goal.saved} / {goal.target} {reached && '— goal reached'}
-                  </span>
+                  <span className={`num ${Styles.goalAmounts}`}>{goal.saved} of {goal.target}</span>
                   <span className={Styles.goalPercent}>{Math.round(percent)}%</span>
                 </div>
 

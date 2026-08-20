@@ -1,18 +1,20 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts'
 import Styles from './Reports.module.css'
 
 const tooltipStyle = {
   contentStyle: {
-    background: '#FFFDF8',
-    border: '1px solid #1F1B16',
-    borderRadius: 4,
-    fontFamily: 'IBM Plex Mono, monospace',
+    background: '#ffffff',
+    border: '1px solid #e2e8f0',
+    borderRadius: 8,
+    fontFamily: 'Inter, sans-serif',
     fontSize: 13,
+    boxShadow: '0px 10px 30px rgba(15,23,42,0.12)',
   },
-  labelStyle: { color: '#1F1B16', fontWeight: 600 },
 }
+
+const lineColors = ['#131b2e', '#006c49', '#f59e0b', '#76777d', '#ba1a1a']
 
 export const Reports = () => {
   const transactions = useSelector((state) => state.budget.transactions)
@@ -20,8 +22,8 @@ export const Reports = () => {
   if (transactions.length === 0) {
     return (
       <div className={Styles.wrapper}>
-        <h1 className={Styles.title}>Reports</h1>
-        <p className={Styles.subtitle}>Trends across every month</p>
+        <h1 className={Styles.pageTitle}>Reports</h1>
+        <p className={Styles.pageSubtitle}>Patterns and trends over time.</p>
         <div className={Styles.emptyState}>
           <p>Nothing to report on yet</p>
           <Link to="/add" className={Styles.emptyLink}>Add your first transaction</Link>
@@ -38,75 +40,146 @@ export const Reports = () => {
     if (t.type === 'income') monthlyTotals[month].income += t.amount
     else monthlyTotals[month].expenses += t.amount
   })
+  const months = Object.values(monthlyTotals).sort((a, b) => a.month.localeCompare(b.month))
 
-  const trendData = Object.values(monthlyTotals).sort((a, b) => a.month.localeCompare(b.month))
+  if (months.length === 0) {
+    return (
+      <div className={Styles.wrapper}>
+        <h1 className={Styles.pageTitle}>Reports</h1>
+        <p className={Styles.pageSubtitle}>Patterns and trends over time.</p>
+        <div className={Styles.emptyState}>
+          <p>Your transactions don't have dates yet, so trends can't be calculated.</p>
+          <Link to="/transactions" className={Styles.emptyLink}>Edit transactions to add dates</Link>
+        </div>
+      </div>
+    )
+  }
 
-  const totalIncome = trendData.reduce((sum, m) => sum + m.income, 0)
-  const totalExpenses = trendData.reduce((sum, m) => sum + m.expenses, 0)
-  const avgMonthlyExpense = trendData.length > 0 ? Math.round(totalExpenses / trendData.length) : 0
+  const thisMonth = months[months.length - 1]
+  const lastMonth = months.length > 1 ? months[months.length - 2] : null
 
-  const bestMonth = [...trendData].sort((a, b) => (b.income - b.expenses) - (a.income - a.expenses))[0]
+  const pctChange = (curr, prev) => {
+    if (!prev || prev === 0) return null
+    return Math.round(((curr - prev) / prev) * 100)
+  }
+
+  const expenseChange = lastMonth ? pctChange(thisMonth.expenses, lastMonth.expenses) : null
+  const incomeChange = lastMonth ? pctChange(thisMonth.income, lastMonth.income) : null
+
+  const savingsRateData = months.map((m) => ({
+    month: m.month,
+    rate: m.income > 0 ? Math.round(((m.income - m.expenses) / m.income) * 100) : 0,
+  }))
+
+  const categoryAllTime = {}
+  transactions.filter((t) => t.type === 'expense').forEach((t) => {
+    categoryAllTime[t.category] = (categoryAllTime[t.category] || 0) + t.amount
+  })
+  const topCategories = Object.entries(categoryAllTime)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4)
+    .map(([cat]) => cat)
+
+  const categoryTrendData = months.map((m) => {
+    const row = { month: m.month }
+    topCategories.forEach((cat) => {
+      row[cat] = transactions
+        .filter((t) => t.type === 'expense' && t.category === cat && t.date && t.date.slice(0, 7) === m.month)
+        .reduce((sum, t) => sum + t.amount, 0)
+    })
+    return row
+  })
+
+  const biggest = [...transactions]
+    .filter((t) => t.type === 'expense')
+    .sort((a, b) => b.amount - a.amount)
+    .slice(0, 5)
 
   return (
     <div className={Styles.wrapper}>
-      <h1 className={Styles.title}>Reports</h1>
-      <p className={Styles.subtitle}>Trends across every month</p>
+      <h1 className={Styles.pageTitle}>Reports</h1>
+      <p className={Styles.pageSubtitle}>Patterns and trends over time.</p>
 
-      <div className={Styles.statsRow}>
-        <div className={Styles.statCard}>
-          <p className={Styles.statLabel}>Total Income</p>
-          <p className={`${Styles.statValue} ${Styles.income}`}>{totalIncome}</p>
-        </div>
-        <div className={Styles.statCard}>
-          <p className={Styles.statLabel}>Total Expenses</p>
-          <p className={`${Styles.statValue} ${Styles.expense}`}>{totalExpenses}</p>
-        </div>
-        <div className={Styles.statCard}>
-          <p className={Styles.statLabel}>Avg. Monthly Spend</p>
-          <p className={Styles.statValue}>{avgMonthlyExpense}</p>
-        </div>
+      <div className={Styles.card}>
+        <h2 className={Styles.cardTitle}>This Month vs Last Month</h2>
+        {lastMonth ? (
+          <div className={Styles.compareRow}>
+            <div className={Styles.compareCol}>
+              <p className={Styles.compareLabel}>Expenses</p>
+              <p className={`${Styles.compareValue} num`}>{thisMonth.expenses}</p>
+              {expenseChange !== null && (
+                <span className={expenseChange > 0 ? Styles.up : Styles.down}>
+                  <span className="icon">{expenseChange > 0 ? 'trending_up' : 'trending_down'}</span>
+                  {Math.abs(expenseChange)}% vs last month
+                </span>
+              )}
+            </div>
+            <div className={Styles.compareCol}>
+              <p className={Styles.compareLabel}>Income</p>
+              <p className={`${Styles.compareValue} num`}>{thisMonth.income}</p>
+              {incomeChange !== null && (
+                <span className={incomeChange >= 0 ? Styles.down : Styles.up}>
+                  <span className="icon">{incomeChange > 0 ? 'trending_up' : 'trending_down'}</span>
+                  {Math.abs(incomeChange)}% vs last month
+                </span>
+              )}
+            </div>
+          </div>
+        ) : (
+          <p className={Styles.mutedText}>Add data across at least two months to see a comparison.</p>
+        )}
       </div>
 
-      {bestMonth && (
-        <p className={Styles.highlight}>
-          Best month: <strong>{bestMonth.month}</strong> with a net of{' '}
-          <strong className={Styles.income}>{bestMonth.income - bestMonth.expenses}</strong>
-        </p>
+      <div className={Styles.card}>
+        <h2 className={Styles.cardTitle}>Savings Rate</h2>
+        <p className={Styles.mutedText}>The share of income you kept each month, after expenses.</p>
+        <ResponsiveContainer width="100%" height={220}>
+          <LineChart data={savingsRateData}>
+            <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+            <XAxis dataKey="month" stroke="#76777d" fontSize={12} />
+            <YAxis stroke="#76777d" fontSize={12} unit="%" />
+            <Tooltip {...tooltipStyle} />
+            <Line type="monotone" dataKey="rate" stroke="#006c49" strokeWidth={2} dot={{ r: 3 }} name="Savings rate" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      {topCategories.length > 0 && (
+        <div className={Styles.card}>
+          <h2 className={Styles.cardTitle}>Top Categories Over Time</h2>
+          <ResponsiveContainer width="100%" height={240}>
+            <LineChart data={categoryTrendData}>
+              <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+              <XAxis dataKey="month" stroke="#76777d" fontSize={12} />
+              <YAxis stroke="#76777d" fontSize={12} />
+              <Tooltip {...tooltipStyle} />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
+              {topCategories.map((cat, i) => (
+                <Line
+                  key={cat}
+                  type="monotone"
+                  dataKey={cat}
+                  stroke={lineColors[i % lineColors.length]}
+                  strokeWidth={2}
+                  dot={{ r: 2 }}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       )}
 
-      <h2 className={Styles.sectionTitle}>Income vs Expenses Over Time</h2>
-      <ResponsiveContainer width="100%" height={260}>
-        <LineChart data={trendData}>
-          <CartesianGrid stroke="#D8D2C4" strokeDasharray="3 3" />
-          <XAxis dataKey="month" stroke="#837C6D" fontSize={12} />
-          <YAxis stroke="#837C6D" fontSize={12} />
-          <Tooltip {...tooltipStyle} />
-          <Legend wrapperStyle={{ fontSize: 12 }} />
-          <Line type="monotone" dataKey="income" stroke="#1B4332" strokeWidth={2} dot={{ r: 3 }} name="Income" />
-          <Line type="monotone" dataKey="expenses" stroke="#B33A3A" strokeWidth={2} dot={{ r: 3 }} name="Expenses" />
-        </LineChart>
-      </ResponsiveContainer>
-
-      <h2 className={Styles.sectionTitle}>Monthly Expenses</h2>
-      <ResponsiveContainer width="100%" height={230}>
-        <BarChart data={trendData}>
-          <XAxis dataKey="month" stroke="#837C6D" fontSize={12} />
-          <YAxis stroke="#837C6D" fontSize={12} />
-          <Tooltip {...tooltipStyle} />
-          <Bar dataKey="expenses" fill="#B33A3A" radius={[3, 3, 0, 0]} background={false} name="Expenses" />
-        </BarChart>
-      </ResponsiveContainer>
-
-      <h2 className={Styles.sectionTitle}>By Month</h2>
-      <div className={Styles.receipt}>
-        <ul className={Styles.list}>
-          {[...trendData].reverse().map((m) => (
-            <li key={m.month} className={Styles.item}>
-              <span className={Styles.itemTitle}>{m.month}</span>
-              <span className={Styles.leader}></span>
-              <span className={`${Styles.amount} ${Styles.income}`}>+{m.income}</span>
-              <span className={`${Styles.amount} ${Styles.expense}`}>-{m.expenses}</span>
-              <span className={Styles.amount}>{m.income - m.expenses}</span>
+      <div className={Styles.card}>
+        <h2 className={Styles.cardTitle}>Biggest Expenses</h2>
+        <ul className={Styles.rankList}>
+          {biggest.map((t, i) => (
+            <li key={t.id} className={Styles.rankItem}>
+              <span className={Styles.rankNum}>{i + 1}</span>
+              <div className={Styles.rankInfo}>
+                <span className={Styles.rankTitle}>{t.title}</span>
+                <span className={Styles.rankMeta}>{t.category}</span>
+              </div>
+              <span className={`${Styles.rankAmount} num`}>{t.amount}</span>
             </li>
           ))}
         </ul>

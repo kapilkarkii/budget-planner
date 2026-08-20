@@ -1,28 +1,31 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
-import { Navbar } from './components/Navbar'
-import { Dashboard} from './pages/Dashboard'
+import { Sidebar } from './components/Sidebar'
+import { Dashboard } from './pages/Dashboard'
 import { Transactions } from './pages/Transactions'
 import { AddTransaction } from './pages/AddTransaction'
 import { Reports } from './pages/Reports'
-import { Settings } from './pages/Settings'
 import { Goals } from './pages/Goals'
+import { Settings } from './pages/Settings'
 
 function App() {
-
   return (
-   <BrowserRouter>
-   <Navbar/>
-   <Routes>
-      <Route path="/" element={<Dashboard/>}/>
-      <Route path="/transactions" element={<Transactions/>}/>
-      <Route path="/add" element={<AddTransaction/>}/>
-      <Route path="/edit/:id" element={<AddTransaction/>}/> 
-      <Route path="/reports" element={<Reports/>}/>
-      <Route path="/settings" element={<Settings/>}/>
-      <Route path="/goals" element={<Goals/>}/>
-   </Routes>
-   </BrowserRouter>
+    <BrowserRouter>
+      <div style={{ display: 'flex', minHeight: '100vh' }}>
+        <Sidebar />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <Routes>
+            <Route path="/" element={<Dashboard/>}/>
+            <Route path="/transactions" element={<Transactions/>}/>
+            <Route path="/add" element={<AddTransaction/>}/>
+            <Route path="/edit/:id" element={<AddTransaction/>}/>
+            <Route path="/reports" element={<Reports/>}/>
+            <Route path="/goals" element={<Goals/>}/>
+            <Route path="/settings" element={<Settings/>}/>
+          </Routes>
+        </div>
+      </div>
+    </BrowserRouter>
   )
 }
 

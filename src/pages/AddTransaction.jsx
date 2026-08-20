@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { addTransaction, updateTransaction } from '../features/budget/budgetSlice'
+import { CATEGORIES } from '../constants/categories'
 import Styles from './AddTransaction.module.css'
 
 const today = () => new Date().toISOString().split('T')[0]
-
-const expenseCategories = ['Food', 'Coffee', 'Transport', 'Rent', 'Entertainment', 'Shopping', 'Other']
-const incomeCategories = ['Salary', 'Freelance', 'Gift', 'Investment', 'Other']
 
 export const AddTransaction = () => {
   const dispatch = useDispatch()
@@ -24,8 +22,6 @@ export const AddTransaction = () => {
   const [date, setDate] = useState(today())
   const [errors, setErrors] = useState({})
 
-  const categoryOptions = type === 'expense' ? expenseCategories : incomeCategories
-
   useEffect(() => {
     if (editingTransaction) {
       setTitle(editingTransaction.title)
@@ -35,11 +31,6 @@ export const AddTransaction = () => {
       setDate(editingTransaction.date || today())
     }
   }, [editingTransaction])
-
-  const handleTypeChange = (newType) => {
-    setType(newType)
-    setCategory('')
-  }
 
   const validate = () => {
     const newErrors = {}
@@ -84,72 +75,84 @@ export const AddTransaction = () => {
 
   return (
     <div className={Styles.wrapper}>
-      <form className={Styles.box} onSubmit={handleSubmit} noValidate>
-        <h1 className={Styles.title}>{editingTransaction ? 'Edit Entry' : 'Add Transaction'}</h1>
-        <p className={Styles.subtitle}>
-          {editingTransaction ? 'Update this ledger line' : 'Record a new income or expense'}
-        </p>
+      <h1 className={Styles.pageTitle}>{editingTransaction ? 'Edit Transaction' : 'Add Transaction'}</h1>
+      <p className={Styles.pageSubtitle}>
+        {editingTransaction ? 'Update the details below.' : 'Record a new income or expense.'}
+      </p>
 
+      <form className={Styles.card} onSubmit={handleSubmit} noValidate>
         <div className={Styles.typeGroup}>
           <button
             type="button"
-            className={`${Styles.typeBtn} ${type === 'expense' ? Styles.typeBtnActive : ''}`}
-            onClick={() => handleTypeChange('expense')}
+            className={`${Styles.typeBtn} ${type === 'expense' ? Styles.typeBtnExpenseActive : ''}`}
+            onClick={() => setType('expense')}
           >
+            <span className="icon">north</span>
             Expense
           </button>
           <button
             type="button"
-            className={`${Styles.typeBtn} ${type === 'income' ? Styles.typeBtnActive : ''}`}
-            onClick={() => handleTypeChange('income')}
+            className={`${Styles.typeBtn} ${type === 'income' ? Styles.typeBtnIncomeActive : ''}`}
+            onClick={() => setType('income')}
           >
+            <span className="icon">south</span>
             Income
           </button>
         </div>
 
-        <label className={Styles.label}>Title</label>
-        <input
-          className={Styles.input}
-          type="text"
-          placeholder="e.g. Grocery shopping"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        {errors.title && <span className={Styles.error}>{errors.title}</span>}
+        <div className={Styles.field}>
+          <label className={Styles.label}>Title</label>
+          <input
+            className={Styles.input}
+            type="text"
+            placeholder="e.g. Whole Foods Market"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          {errors.title && <span className={Styles.error}>{errors.title}</span>}
+        </div>
 
-        <label className={Styles.label}>Amount</label>
-        <input
-          className={Styles.input}
-          type="number"
-          placeholder="0.00"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        {errors.amount && <span className={Styles.error}>{errors.amount}</span>}
+        <div className={Styles.row}>
+          <div className={Styles.field}>
+            <label className={Styles.label}>Amount</label>
+            <input
+              className={Styles.input}
+              type="number"
+              placeholder="0.00"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+            {errors.amount && <span className={Styles.error}>{errors.amount}</span>}
+          </div>
 
-        <label className={Styles.label}>Category</label>
-        <select
-          className={Styles.input}
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="">Select category</option>
-          {categoryOptions.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
-        {errors.category && <span className={Styles.error}>{errors.category}</span>}
+          <div className={Styles.field}>
+            <label className={Styles.label}>Date</label>
+            <input
+              className={Styles.input}
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+            {errors.date && <span className={Styles.error}>{errors.date}</span>}
+          </div>
+        </div>
 
-        <label className={Styles.label}>Date</label>
-        <input
-          className={Styles.input}
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        {errors.date && <span className={Styles.error}>{errors.date}</span>}
+        <div className={Styles.field}>
+          <label className={Styles.label}>Category</label>
+          <select
+            className={Styles.input}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">Select category</option>
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+          {errors.category && <span className={Styles.error}>{errors.category}</span>}
+        </div>
 
-        <button className={Styles.button} type="submit">
+        <button className={Styles.submitBtn} type="submit">
           {editingTransaction ? 'Save Changes' : `Add ${type === 'expense' ? 'Expense' : 'Income'}`}
         </button>
       </form>

@@ -1,24 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
 :root {
-  --paper: #F7F3EA;
-  --paper-raised: #FFFDF8;
-  --ink: #1F1B16;
-  --ink-muted: #837C6D;
-  --rule: #D8D2C4;
+  --surface: #f7f9fb;
+  --surface-lowest: #ffffff;
+  --surface-low: #f2f4f6;
+  --surface-container: #eceef0;
+  --surface-high: #e6e8ea;
+  --border: #e2e8f0;
 
-  --income: #1B4332;
-  --income-soft: #E4ECE7;
-  --expense: #B33A3A;
-  --expense-soft: #F4E3E1;
-  --primary: #1B4332;
-  --primary-hover: #163A2A;
-  --gold: #C9A227;
+  --ink: #191c1e;
+  --ink-muted: #45464d;
+  --ink-faint: #76777d;
 
-  --radius: 4px;
-  --font-display: 'Space Grotesk', sans-serif;
+  --primary: #131b2e;
+  --primary-hover: #0c1120;
+  --secondary: #006c49;
+  --secondary-soft: #e3f9ee;
+  --secondary-bright: #6cf8bb;
+
+  --error: #ba1a1a;
+  --error-soft: #ffdad6;
+  --warn: #f59e0b;
+  --warn-soft: #fef3e0;
+
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+
   --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-icon: 'Material Symbols Outlined';
+
+  --shadow-card: 0px 4px 20px rgba(15, 23, 42, 0.05);
+  --shadow-overlay: 0px 10px 30px rgba(15, 23, 42, 0.12);
 }
 
 * {
@@ -26,7 +42,7 @@
 }
 
 body {
-  background: var(--paper);
+  background: var(--surface);
   color: var(--ink);
   font-family: var(--font-body);
   margin: 0;
@@ -34,13 +50,19 @@ body {
 }
 
 h1, h2, h3 {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
+.icon {
+  font-family: var(--font-icon);
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
 .num {
-  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
@@ -49,10 +71,9 @@ h1, h2, h3 {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* torn / perforated edge, used as a signature motif on ledger cards */
-.tornEdge {
-  height: 10px;
-  background-image: radial-gradient(circle at 8px 0, transparent 5px, var(--paper) 5.5px);
-  background-size: 16px 10px;
-  background-repeat: repeat-x;
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

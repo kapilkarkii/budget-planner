@@ -1,103 +1,129 @@
 .wrapper {
-  max-width: 440px;
-  margin: 40px auto;
-  padding: 0 20px 60px;
+  padding: 32px 40px 60px;
   animation: fadeIn 0.25s ease;
+  max-width: 560px;
 }
 
-.box {
-  background: var(--paper-raised);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  padding: 30px 28px;
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.pageSubtitle {
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+  margin: 6px 0 24px;
+}
+
+.card {
+  background: var(--surface-lowest);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.title {
-  font-size: 1.4rem;
-  margin: 0 0 2px 0;
-}
-
-.subtitle {
-  color: var(--ink-muted);
-  font-size: 0.85rem;
-  margin: 0 0 14px 0;
-  padding-bottom: 14px;
-  border-bottom: 1px dashed var(--rule);
-}
-
-.label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-muted);
-  margin-bottom: -8px;
-}
-
-.input {
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  border: 1px solid var(--rule);
-  background: var(--paper);
-  color: var(--ink);
-  font-size: 0.95rem;
-  font-family: var(--font-body);
-}
-
-.input:focus {
-  outline: none;
-  border-color: var(--income);
-}
-
-.error {
-  color: var(--expense);
-  font-size: 0.78rem;
-  margin-top: -8px;
+  gap: 18px;
 }
 
 .typeGroup {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .typeBtn {
   flex: 1;
-  padding: 10px;
-  border-radius: var(--radius);
-  border: 1px solid var(--rule);
-  background: var(--paper);
-  color: var(--ink-muted);
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.typeBtnActive {
-  border-color: var(--income);
-  color: var(--paper);
-  background: var(--income);
-}
-
-.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   padding: 12px;
   border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-low);
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+}
+
+.typeBtnExpenseActive {
+  border-color: var(--error);
+  background: var(--error-soft);
+  color: var(--error);
+}
+
+.typeBtnIncomeActive {
+  border-color: var(--secondary);
+  background: var(--secondary-soft);
+  color: var(--secondary);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.input {
+  padding: 11px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-low);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--surface-lowest);
+}
+
+.error {
+  color: var(--error);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.submitBtn {
+  padding: 13px;
+  border-radius: var(--radius);
   border: none;
-  background: var(--income);
-  color: var(--paper);
+  background: var(--primary);
+  color: #ffffff;
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  margin-top: 8px;
+  margin-top: 4px;
+  font-family: var(--font-body);
 }
 
-.button:hover {
+.submitBtn:hover {
   background: var(--primary-hover);
 }
 
-@media (max-width: 480px) {
-  .box {
-    padding: 22px 18px;
+@media (max-width: 640px) {
+  .wrapper {
+    padding: 20px 16px 40px;
+  }
+  .card {
+    padding: 20px;
+  }
+  .row {
+    grid-template-columns: 1fr;
   }
 }

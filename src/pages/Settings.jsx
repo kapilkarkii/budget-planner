@@ -10,6 +10,7 @@ export const Settings = () => {
 
   const [newCategory, setNewCategory] = useState('')
   const [error, setError] = useState('')
+  const [confirmCat, setConfirmCat] = useState(null)
 
   const handleAdd = (e) => {
     e.preventDefault()
@@ -31,12 +32,21 @@ export const Settings = () => {
 
   const countInUse = (cat) => transactions.filter((t) => t.category === cat).length
 
+  const handleDelete = (cat) => {
+    if (confirmCat === cat) {
+      dispatch(deleteCategory(cat))
+      setConfirmCat(null)
+    } else {
+      setConfirmCat(cat)
+    }
+  }
+
   return (
     <div className={Styles.wrapper}>
-      <h1 className={Styles.title}>Settings</h1>
-      <p className={Styles.subtitle}>Manage your categories</p>
+      <h1 className={Styles.pageTitle}>Settings</h1>
+      <p className={Styles.pageSubtitle}>Manage your categories.</p>
 
-      <form className={Styles.addForm} onSubmit={handleAdd}>
+      <form className={Styles.addCard} onSubmit={handleAdd}>
         <input
           className={Styles.input}
           type="text"
@@ -44,26 +54,30 @@ export const Settings = () => {
           value={newCategory}
           onChange={(e) => { setNewCategory(e.target.value); setError('') }}
         />
-        <button className={Styles.addBtn} type="submit">Add</button>
+        <button className={Styles.addBtn} type="submit">
+          <span className="icon">add</span>
+          Add
+        </button>
       </form>
       {error && <span className={Styles.error}>{error}</span>}
 
-      <div className={Styles.receipt}>
+      <div className={Styles.card}>
+        <h2 className={Styles.cardTitle}>Categories</h2>
         <ul className={Styles.list}>
           {categories.map((cat) => {
             const used = countInUse(cat)
+            const confirming = confirmCat === cat
             return (
               <li key={cat} className={Styles.item}>
-                <span className={Styles.itemTitle}>{cat}</span>
-                <span className={Styles.leader}></span>
-                <span className={Styles.usage}>
+                <span className={Styles.itemName}>{cat}</span>
+                <span className={Styles.itemUsage}>
                   {used > 0 ? `${used} transaction${used > 1 ? 's' : ''}` : 'unused'}
                 </span>
                 <button
-                  className={Styles.deleteBtn}
-                  onClick={() => dispatch(deleteCategory(cat))}
+                  className={`${Styles.deleteBtn} ${confirming ? Styles.confirmDelete : ''}`}
+                  onClick={() => handleDelete(cat)}
                 >
-                  remove
+                  {confirming ? 'Confirm remove' : 'Remove'}
                 </button>
               </li>
             )
