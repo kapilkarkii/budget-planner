@@ -9,6 +9,7 @@ export const Settings = () => {
   const dispatch = useDispatch()
 
   const [newCategory, setNewCategory] = useState('')
+  const [newType, setNewType] = useState('expense')
   const [error, setError] = useState('')
   const [confirmCat, setConfirmCat] = useState(null)
 
@@ -20,24 +21,25 @@ export const Settings = () => {
       setError('Category name cannot be empty')
       return
     }
-    if (categories.includes(name)) {
+    if (categories.some((c) => c.name === name)) {
       setError('That category already exists')
       return
     }
 
-    dispatch(addCategory(name))
+    dispatch(addCategory({ name, type: newType }))
     setNewCategory('')
+    setNewType('expense')
     setError('')
   }
 
-  const countInUse = (cat) => transactions.filter((t) => t.category === cat).length
+  const countInUse = (catName) => transactions.filter((t) => t.category === catName).length
 
-  const handleDelete = (cat) => {
-    if (confirmCat === cat) {
-      dispatch(deleteCategory(cat))
+  const handleDelete = (catName) => {
+    if (confirmCat === catName) {
+      dispatch(deleteCategory(catName))
       setConfirmCat(null)
     } else {
-      setConfirmCat(cat)
+      setConfirmCat(catName)
     }
   }
 
@@ -54,6 +56,24 @@ export const Settings = () => {
           value={newCategory}
           onChange={(e) => { setNewCategory(e.target.value); setError('') }}
         />
+
+        <div className={Styles.typeToggle}>
+          <button
+            type="button"
+            className={`${Styles.typeBtn} ${newType === 'expense' ? Styles.typeBtnExpenseActive : ''}`}
+            onClick={() => setNewType('expense')}
+          >
+            Expense
+          </button>
+          <button
+            type="button"
+            className={`${Styles.typeBtn} ${newType === 'income' ? Styles.typeBtnIncomeActive : ''}`}
+            onClick={() => setNewType('income')}
+          >
+            Income
+          </button>
+        </div>
+
         <button className={Styles.addBtn} type="submit">
           <span className="icon">add</span>
           Add
@@ -65,17 +85,20 @@ export const Settings = () => {
         <h2 className={Styles.cardTitle}>Categories</h2>
         <ul className={Styles.list}>
           {categories.map((cat) => {
-            const used = countInUse(cat)
-            const confirming = confirmCat === cat
+            const used = countInUse(cat.name)
+            const confirming = confirmCat === cat.name
             return (
-              <li key={cat} className={Styles.item}>
-                <span className={Styles.itemName}>{cat}</span>
+              <li key={cat.name} className={Styles.item}>
+                <span className={Styles.itemName}>{cat.name}</span>
+                <span className={`${Styles.typeBadge} ${cat.type === 'income' ? Styles.typeBadgeIncome : Styles.typeBadgeExpense}`}>
+                  {cat.type}
+                </span>
                 <span className={Styles.itemUsage}>
                   {used > 0 ? `${used} transaction${used > 1 ? 's' : ''}` : 'unused'}
                 </span>
                 <button
                   className={`${Styles.deleteBtn} ${confirming ? Styles.confirmDelete : ''}`}
-                  onClick={() => handleDelete(cat)}
+                  onClick={() => handleDelete(cat.name)}
                 >
                   {confirming ? 'Confirm remove' : 'Remove'}
                 </button>

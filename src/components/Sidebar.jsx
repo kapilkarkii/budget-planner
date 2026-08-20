@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Styles from './Sidebar.module.css'
 
@@ -11,16 +12,26 @@ const navItems = [
 
 export const Sidebar = () => {
   const location = useLocation()
+  const [collapsed, setCollapsed] = useState(false)
 
   return (
-    <aside className={Styles.sidebar}>
+    <aside className={`${Styles.sidebar} ${collapsed ? Styles.collapsed : ''}`}>
       <div>
         <div className={Styles.brand}>
-          <span className={Styles.brandMark}>P</span>
-          <div>
-            <div className={Styles.brandName}>PennyWise</div>
-            <div className={Styles.brandTag}>Financial Expert</div>
-          </div>
+          <span className={`icon ${Styles.brandMark}`}>savings</span>
+          {!collapsed && (
+            <div>
+              <div className={Styles.brandName}>Ledgerly</div>
+              <div className={Styles.brandTag}>Budget Planner</div>
+            </div>
+          )}
+          <button
+            className={Styles.collapseBtn}
+            onClick={() => setCollapsed((prev) => !prev)}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <span className="icon">{collapsed ? 'chevron_right' : 'chevron_left'}</span>
+          </button>
         </div>
 
         <nav className={Styles.nav}>
@@ -31,18 +42,19 @@ export const Sidebar = () => {
                 key={item.to}
                 to={item.to}
                 className={`${Styles.navItem} ${active ? Styles.navItemActive : ''}`}
+                title={collapsed ? item.label : undefined}
               >
                 <span className={`icon ${Styles.navIcon}`}>{item.icon}</span>
-                {item.label}
+                {!collapsed && item.label}
               </Link>
             )
           })}
         </nav>
       </div>
 
-      <Link to="/add" className={Styles.addBtn}>
+      <Link to="/add" className={Styles.addBtn} title={collapsed ? 'Add Transaction' : undefined}>
         <span className="icon">add</span>
-        Add Transaction
+        {!collapsed && 'Add Transaction'}
       </Link>
     </aside>
   )

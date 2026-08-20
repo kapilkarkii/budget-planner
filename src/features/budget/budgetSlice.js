@@ -1,15 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-
-const DEFAULT_CATEGORIES = [
-  'Food',
-  'Transport',
-  'Rent',
-  'Utilities',
-  'Entertainment',
-  'Shopping',
-  'Salary',
-  'Other',
-]
+import { CATEGORIES } from '../../constants/categories'
 
 const loadTransactions = () => {
   try {
@@ -32,7 +22,20 @@ const loadLimits = () => {
 const loadCategories = () => {
   try {
     const saved = localStorage.getItem('categories')
-    return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES
+    if (!saved) return DEFAULT_CATEGORIES
+
+    const parsed = JSON.parse(saved)
+    if (!Array.isArray(parsed) || parsed.length === 0) return DEFAULT_CATEGORIES
+
+    // Migrate old format (plain strings) to {name, type} objects
+    if (typeof parsed[0] === 'string') {
+      return parsed.map((name) => ({
+        name,
+        type: name === 'Salary' ? 'income' : 'expense',
+      }))
+    }
+
+    return parsed
   } catch {
     return DEFAULT_CATEGORIES
   }
@@ -72,13 +75,14 @@ const budgetSlice = createSlice({
       state.limits[action.payload.category] = action.payload.limit
     },
     addCategory: (state, action) => {
-      const name = action.payload.trim()
-      if (name && !state.categories.includes(name)) {
-        state.categories.push(name)
+      const name = action.payload.name.trim()
+      const type = action.payload.type
+      if (name && !state.categories.some((c) => c.name === name)) {
+        state.categories.push({ name, type })
       }
     },
     deleteCategory: (state, action) => {
-      state.categories = state.categories.filter((c) => c !== action.payload)
+      state.categories = state.categories.filter((c) => c.name !== action.payload)
     },
     addGoal: (state, action) => {
       state.goals.push({

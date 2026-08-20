@@ -95,6 +95,53 @@
   background: var(--primary-hover);
 }
 
+.collapseBtn {
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-low);
+  color: var(--ink-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.collapseBtn:hover {
+  color: var(--ink);
+  border-color: var(--primary);
+}
+
+.collapseBtn .icon {
+  font-size: 16px;
+}
+
+.sidebar.collapsed {
+  width: 76px;
+  padding: 24px 12px;
+}
+
+.sidebar.collapsed .brand {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar.collapsed .collapseBtn {
+  margin-left: 0;
+}
+
+.sidebar.collapsed .navItem {
+  justify-content: center;
+  padding: 10px;
+}
+
+.sidebar.collapsed .addBtn {
+  padding: 10px;
+}
+
 @media (max-width: 900px) {
   .sidebar {
     width: 100%;
@@ -121,4 +168,12 @@
   .addBtn span:last-child {
     display: none;
   }
+  .collapseBtn {
+    display: none;
+  }
+}
+
+.brandMark {
+  font-size: 18px;
+  line-height: 1;
 }

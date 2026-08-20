@@ -11,9 +11,9 @@ import { Settings } from './pages/Settings'
 function App() {
   return (
     <BrowserRouter>
-      <div style={{ display: 'flex', minHeight: '100vh' }}>
+      <div className="appShell">
         <Sidebar />
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="mainContent">
           <Routes>
             <Route path="/" element={<Dashboard/>}/>
             <Route path="/transactions" element={<Transactions/>}/>

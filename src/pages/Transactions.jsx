@@ -41,48 +41,84 @@ export const Transactions = () => {
         <div className={Styles.headerRow}>
           <div>
             <h1 className={Styles.pageTitle}>Transactions</h1>
-            <p className={Styles.pageSubtitle}>Review and manage your recent activity.</p>
+            <p className={Styles.pageSubtitle}>
+              Review and manage your recent activity.
+            </p>
           </div>
         </div>
+
         <div className={Styles.emptyState}>
           <p>No transactions yet</p>
-          <Link to="/add" className={Styles.emptyLink}>Add your first transaction</Link>
+
+          <Link to="/add" className={Styles.emptyLink}>
+            Add your first transaction
+          </Link>
         </div>
       </div>
     )
   }
 
   const filtered = transactions.filter((t) => {
-    const matchesCategory = categoryFilter === 'all' || t.category === categoryFilter
-    const matchesType = typeFilter === 'all' || t.type === typeFilter
-    const matchesSearch = t.title.toLowerCase().includes(search.toLowerCase())
+    const matchesCategory =
+      categoryFilter === 'all' || t.category === categoryFilter
+
+    const matchesType =
+      typeFilter === 'all' || t.type === typeFilter
+
+    const matchesSearch =
+      t.title.toLowerCase().includes(search.toLowerCase())
+
     return matchesCategory && matchesType && matchesSearch
   })
 
   const sorted = [...filtered].sort((a, b) => {
-    if (sortBy === 'newest') return new Date(b.date) - new Date(a.date)
-    if (sortBy === 'oldest') return new Date(a.date) - new Date(b.date)
-    if (sortBy === 'amountHigh') return b.amount - a.amount
-    if (sortBy === 'amountLow') return a.amount - b.amount
+    if (sortBy === 'newest') {
+      return new Date(b.date) - new Date(a.date)
+    }
+
+    if (sortBy === 'oldest') {
+      return new Date(a.date) - new Date(b.date)
+    }
+
+    if (sortBy === 'amountHigh') {
+      return b.amount - a.amount
+    }
+
+    if (sortBy === 'amountLow') {
+      return a.amount - b.amount
+    }
+
     return 0
   })
 
   return (
     <div className={Styles.wrapper}>
+
+      {/* Header */}
       <div className={Styles.headerRow}>
         <div>
           <h1 className={Styles.pageTitle}>Transactions</h1>
-          <p className={Styles.pageSubtitle}>Review and manage your recent activity.</p>
+
+          <p className={Styles.pageSubtitle}>
+            Review and manage your recent activity.
+          </p>
         </div>
+
         <Link to="/add" className={Styles.addBtn}>
           <span className="icon">add</span>
           Add Transaction
         </Link>
       </div>
 
+      {/* Filters */}
       <div className={Styles.filterBar}>
+
+        {/* Search */}
         <div className={Styles.searchBox}>
-          <span className={`icon ${Styles.searchIcon}`}>search</span>
+          <span className={`icon ${Styles.searchIcon}`}>
+            search
+          </span>
+
           <input
             className={Styles.searchInput}
             type="text"
@@ -91,76 +127,183 @@ export const Transactions = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <select className={Styles.select} value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+
+        {/* Type Filter */}
+        <select
+          className={Styles.select}
+          value={typeFilter}
+          onChange={(e) => {
+            setTypeFilter(e.target.value)
+
+            // Reset category when changing type
+            setCategoryFilter('all')
+          }}
+        >
           <option value="all">All Types</option>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
-        <select className={Styles.select} value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+
+        {/* Category Filter */}
+        <select
+          className={Styles.select}
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
           <option value="all">All Categories</option>
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
+
+          {CATEGORIES
+            .filter(
+              (cat) =>
+                typeFilter === 'all' ||
+                cat.type === typeFilter
+            )
+            .map((cat) => (
+              <option
+                key={cat.name}
+                value={cat.name}
+              >
+                {cat.name}
+              </option>
+            ))}
         </select>
-        <select className={Styles.select} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+
+        {/* Sort */}
+        <select
+          className={Styles.select}
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
           <option value="newest">Newest First</option>
           <option value="oldest">Oldest First</option>
-          <option value="amountHigh">Amount: High to Low</option>
-          <option value="amountLow">Amount: Low to High</option>
+          <option value="amountHigh">
+            Amount: High to Low
+          </option>
+          <option value="amountLow">
+            Amount: Low to High
+          </option>
         </select>
       </div>
 
+      {/* Transactions Table */}
       <div className={Styles.tableCard}>
+
         {sorted.length === 0 ? (
           <div className={Styles.emptyState}>
-            <p>No transactions match your search or filters</p>
+            <p>
+              No transactions match your search or filters
+            </p>
           </div>
         ) : (
           <table className={Styles.table}>
+
             <thead>
               <tr>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Category</th>
-                <th className={Styles.amountCol}>Amount</th>
-                <th className={Styles.actionCol}>Action</th>
+                <th className={Styles.amountCol}>
+                  Amount
+                </th>
+                <th className={Styles.actionCol}>
+                  Action
+                </th>
               </tr>
             </thead>
+
             <tbody>
               {sorted.map((t) => (
                 <tr key={t.id}>
-                  <td className={Styles.dateCell}>{t.date}</td>
-                  <td className={Styles.descCell}>{t.title}</td>
+
+                  {/* Date */}
+                  <td className={Styles.dateCell}>
+                    {t.date}
+                  </td>
+
+                  {/* Description */}
+                  <td className={Styles.descCell}>
+                    {t.title}
+                  </td>
+
+                  {/* Category */}
                   <td>
                     <span className={Styles.categoryTag}>
-                      <span className={`icon ${Styles.categoryIcon}`}>
+
+                      <span
+                        className={`icon ${Styles.categoryIcon}`}
+                      >
                         {categoryIcons[t.category] || 'category'}
                       </span>
+
                       {t.category}
                     </span>
                   </td>
-                  <td className={`${Styles.amountCol} num ${t.type === 'income' ? Styles.income : Styles.expense}`}>
-                    {t.type === 'income' ? '+' : '-'}{t.amount}
+
+                  {/* Amount */}
+                  <td
+                    className={`
+                      ${Styles.amountCol}
+                      num
+                      ${
+                        t.type === 'income'
+                          ? Styles.income
+                          : Styles.expense
+                      }
+                    `}
+                  >
+                    {t.type === 'income' ? '+' : '-'}
+                    {t.amount}
                   </td>
+
+                  {/* Actions */}
                   <td className={Styles.actionCol}>
                     <div className={Styles.actions}>
-                      <Link to={`/edit/${t.id}`} className={Styles.iconBtn} aria-label={`Edit ${t.title}`}>
-                        <span className="icon">edit</span>
-                      </Link>
-                      <button
-                        className={`${Styles.iconBtn} ${confirmId === t.id ? Styles.confirmDelete : ''}`}
-                        onClick={() => handleDelete(t.id)}
-                        aria-label={confirmId === t.id ? `Confirm delete ${t.title}` : `Delete ${t.title}`}
+
+                      {/* Edit */}
+                      <Link
+                        to={`/edit/${t.id}`}
+                        className={Styles.iconBtn}
+                        aria-label={`Edit ${t.title}`}
                       >
-                        <span className="icon">{confirmId === t.id ? 'check' : 'delete'}</span>
+                        <span className="icon">
+                          edit
+                        </span>
+                      </Link>
+
+                      {/* Delete */}
+                      <button
+                        className={`
+                          ${Styles.iconBtn}
+                          ${
+                            confirmId === t.id
+                              ? Styles.confirmDelete
+                              : ''
+                          }
+                        `}
+                        onClick={() => handleDelete(t.id)}
+                        aria-label={
+                          confirmId === t.id
+                            ? `Confirm delete ${t.title}`
+                            : `Delete ${t.title}`
+                        }
+                      >
+                        <span className="icon">
+                          {confirmId === t.id
+                            ? 'check'
+                            : 'delete'}
+                        </span>
                       </button>
+
                     </div>
                   </td>
+
                 </tr>
               ))}
             </tbody>
+
           </table>
         )}
+
       </div>
     </div>
   )

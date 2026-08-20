@@ -151,3 +151,52 @@
     flex-direction: column;
   }
 }
+
+.typeToggle {
+  display: flex;
+  gap: 6px;
+}
+
+.typeBtn {
+  padding: 11px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-low);
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+  white-space: nowrap;
+}
+
+.typeBtnExpenseActive {
+  border-color: var(--expense);
+  color: var(--expense);
+  background: var(--error-soft);
+}
+
+.typeBtnIncomeActive {
+  border-color: var(--income);
+  color: var(--income);
+  background: var(--secondary-bright);
+}
+
+.typeBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.typeBadgeExpense {
+  color: var(--expense);
+  background: var(--error-soft);
+}
+
+.typeBadgeIncome {
+  color: var(--income);
+  background: var(--secondary-bright);
+}
