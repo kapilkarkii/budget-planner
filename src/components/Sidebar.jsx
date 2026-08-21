@@ -3,11 +3,11 @@ import { Link, useLocation } from 'react-router-dom'
 import Styles from './Sidebar.module.css'
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: 'dashboard' },
-  { to: '/transactions', label: 'Transactions', icon: 'receipt_long' },
-  { to: '/reports', label: 'Reports', icon: 'monitoring' },
-  { to: '/goals', label: 'Goals', icon: 'flag' },
-  { to: '/settings', label: 'Settings', icon: 'tune' },
+  { to: '/', label: 'Dashboard', icon: 'grid_view' },
+  { to: '/transactions', label: 'Transactions', icon: 'swap_horiz' },
+  { to: '/reports', label: 'Analytics', icon: 'donut_large' },
+  { to: '/goals', label: 'Goals', icon: 'adjust' },
+  { to: '/settings', label: 'Settings', icon: 'settings' },
 ]
 
 export const Sidebar = () => {
@@ -18,13 +18,8 @@ export const Sidebar = () => {
     <aside className={`${Styles.sidebar} ${collapsed ? Styles.collapsed : ''}`}>
       <div>
         <div className={Styles.brand}>
-          <span className={`icon ${Styles.brandMark}`}>savings</span>
-          {!collapsed && (
-            <div>
-              <div className={Styles.brandName}>Ledgerly</div>
-              <div className={Styles.brandTag}>Budget Planner</div>
-            </div>
-          )}
+          <span className={Styles.brandMark}>∞</span>
+          {!collapsed && <span className={Styles.brandName}>Ledgerly</span>}
           <button
             className={Styles.collapseBtn}
             onClick={() => setCollapsed((prev) => !prev)}
@@ -52,10 +47,15 @@ export const Sidebar = () => {
         </nav>
       </div>
 
-      <Link to="/add" className={Styles.addBtn} title={collapsed ? 'Add Transaction' : undefined}>
-        <span className="icon">add</span>
-        {!collapsed && <span className={Styles.navLabel}>Add Transaction</span>}
-      </Link>
+      <div className={Styles.userPill}>
+        <span className={Styles.userAvatar}>US</span>
+        {!collapsed && (
+          <div className={Styles.userInfo}>
+            <span className={Styles.userName}>Pro User</span>
+            <span className={Styles.userTag}>Premium</span>
+          </div>
+        )}
+      </div>
     </aside>
   )
 }

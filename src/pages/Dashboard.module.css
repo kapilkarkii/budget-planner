@@ -1,93 +1,82 @@
 .wrapper {
   padding: 32px 40px 60px;
   animation: fadeIn 0.25s ease;
-  max-width: 1280px;
+  max-width: 1320px;
 }
 
 .headerRow {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   gap: 16px;
   flex-wrap: wrap;
 }
 
-.pageTitle {
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.pageSubtitle {
-  color: var(--ink-muted);
-  font-size: 0.95rem;
-  margin-top: 6px;
-}
-
-.monthInput {
-  padding: 10px 14px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: var(--surface-lowest);
-  color: var(--ink);
-  font-family: var(--font-body);
-  font-size: 0.88rem;
-}
-
-.summaryRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 24px;
-}
-
-.summaryCard {
-  background: var(--surface-lowest);
-  border-radius: var(--radius-md);
-  padding: 20px 24px;
-  box-shadow: var(--shadow-card);
-  border-left: 3px solid transparent;
-  transition: transform 0.2s ease;
-}
-
-.summaryCard:hover {
-  transform: translateY(-3px);
-}
-
-.balanceCard { border-left-color: var(--primary); }
-.incomeCard { border-left-color: var(--secondary); }
-.expenseCard { border-left-color: var(--error); }
-
-.summaryTop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.summaryLabel {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
-.summaryIcon {
-  width: 28px;
-  height: 28px;
+.eyebrow {
+  display: inline-block;
+  padding: 5px 12px;
   border-radius: var(--radius-full);
-  background: var(--surface-low);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.headline {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.gradientText {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bellBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  cursor: pointer;
 }
 
-.summaryValue {
-  font-size: 1.7rem;
+.bellBtn:hover {
+  background: var(--surface-hover);
+}
+
+.newTxBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 18px;
+  border-radius: var(--radius-full);
+  background: #ffffff;
+  color: #0a0a0f;
+  text-decoration: none;
   font-weight: 700;
-  margin: 0;
+  font-size: 0.88rem;
+}
+
+.newTxBtn:hover {
+  background: #e5e5e5;
 }
 
 .grid {
@@ -102,89 +91,115 @@
   gap: 24px;
 }
 
-.card {
-  background: var(--surface-lowest);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  box-shadow: var(--shadow-card);
+.netWorthCard, .activityCard, .donutCard, .insightsCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 26px;
 }
 
-.cardHeaderRow {
+.cardTopRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 18px;
 }
 
-.cardTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
+.cardLabel {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 500;
 }
 
-.viewAll {
-  font-size: 0.82rem;
-  color: var(--secondary);
+.trendPill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.trendPill span {
+  font-size: 15px;
+}
+
+.trendUp {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.trendDown {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.netWorthValue {
+  font-size: 3.4rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 24px 0;
+}
+
+.statRow {
+  display: flex;
+  gap: 14px;
+}
+
+.statBlock {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface-raised);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.statIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statIconIncome {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.statIconExpense {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.statLabel {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.statValue {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 2px 0 0 0;
+}
+
+.seeAll {
+  color: var(--cyan);
+  font-size: 0.85rem;
   text-decoration: none;
   font-weight: 500;
 }
 
 .mutedText {
-  color: var(--ink-faint);
+  color: var(--text-faint);
   font-size: 0.88rem;
-}
-
-.donutRow {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.donutLegend {
-  flex: 1;
-  min-width: 160px;
-}
-
-.donutTotalLabel {
-  font-size: 0.75rem;
-  color: var(--ink-faint);
-  margin: 0 0 4px 0;
-}
-
-.donutTotal {
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin: 0 0 12px 0;
-}
-
-.legendList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.legendItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  color: var(--ink-muted);
-}
-
-.legendDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.legendPct {
-  margin-left: auto;
-  font-weight: 600;
-  color: var(--ink);
 }
 
 .txList {
@@ -193,27 +208,24 @@
   margin: 0;
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .txRow {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.txRow:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+  gap: 14px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--surface-raised);
 }
 
 .txIcon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--surface-low);
-  color: var(--ink-muted);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-hover);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -228,90 +240,140 @@
 }
 
 .txTitle {
-  font-weight: 500;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text);
 }
 
 .txMeta {
   font-size: 0.78rem;
-  color: var(--ink-faint);
+  color: var(--text-faint);
 }
 
 .txAmount {
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
   white-space: nowrap;
 }
 
-.income { color: var(--secondary); }
-.expense { color: var(--error); }
-
-.budgetRow, .goalRow {
-  margin-bottom: 18px;
+.income {
+  color: var(--success);
 }
 
-.budgetRow:last-child, .goalRow:last-child {
-  margin-bottom: 0;
-}
-
-.budgetLabelRow {
+.donutWrap {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-bottom: 6px;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
-.budgetAmounts {
-  color: var(--ink-faint);
-  font-weight: 400;
-  font-size: 0.8rem;
+.donutCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
-.goalPct {
-  color: var(--secondary);
-  font-weight: 600;
-}
-
-.progressTrack {
-  width: 100%;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background: var(--surface-low);
-  overflow: hidden;
-}
-
-.progressFill {
-  height: 100%;
-  border-radius: var(--radius-full);
-  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  background-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  background-size: 200px 100%;
-  animation: shimmerBar 1.5s infinite linear;
-}
-
-.overLabel {
+.donutCenterLabel {
   display: block;
-  color: var(--error);
+  color: var(--text-muted);
   font-size: 0.75rem;
-  margin-top: 4px;
-  font-weight: 500;
+}
+
+.donutCenterValue {
+  display: block;
+  color: var(--text);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.legendRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.legendChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: var(--surface-raised);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.legendChip strong {
+  color: var(--text);
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.insightsCard {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    var(--gradient-brand) border-box;
+}
+
+.insightsLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.insightsLabel span {
+  color: var(--purple);
+}
+
+.insightsText {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0 0 18px 0;
+}
+
+.reviewBtn {
+  display: block;
+  text-align: center;
+  padding: 11px;
+  border-radius: var(--radius-full);
+  background: #ffffff;
+  color: #0a0a0f;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.reviewBtn:hover {
+  background: #e5e5e5;
 }
 
 .emptyState {
   text-align: center;
   padding: 80px 20px;
-  color: var(--ink-faint);
-  background: var(--surface-lowest);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-card);
+  color: var(--text-faint);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
 }
 
 .emptyLink {
   display: inline-block;
   margin-top: 12px;
-  color: var(--secondary);
+  color: var(--cyan);
   text-decoration: none;
   font-weight: 600;
 }
@@ -326,7 +388,10 @@
   .wrapper {
     padding: 20px 16px 40px;
   }
-  .summaryRow {
-    grid-template-columns: 1fr;
+  .netWorthValue {
+    font-size: 2.4rem;
+  }
+  .statRow {
+    flex-direction: column;
   }
 }
