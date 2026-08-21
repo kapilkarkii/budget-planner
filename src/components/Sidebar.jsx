@@ -45,7 +45,7 @@ export const Sidebar = () => {
                 title={collapsed ? item.label : undefined}
               >
                 <span className={`icon ${Styles.navIcon}`}>{item.icon}</span>
-                {!collapsed && item.label}
+                {!collapsed && <span className={Styles.navLabel}>{item.label}</span>}
               </Link>
             )
           })}
@@ -54,7 +54,7 @@ export const Sidebar = () => {
 
       <Link to="/add" className={Styles.addBtn} title={collapsed ? 'Add Transaction' : undefined}>
         <span className="icon">add</span>
-        {!collapsed && 'Add Transaction'}
+        {!collapsed && <span className={Styles.navLabel}>Add Transaction</span>}
       </Link>
     </aside>
   )
