@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useTheme } from '../hooks/useTheme'
 import Styles from './Sidebar.module.css'
 
 const navItems = [
@@ -13,6 +14,7 @@ const navItems = [
 export const Sidebar = () => {
   const location = useLocation()
   const [collapsed, setCollapsed] = useState(false)
+  const { theme, toggleTheme } = useTheme()
 
   return (
     <aside className={`${Styles.sidebar} ${collapsed ? Styles.collapsed : ''}`}>
@@ -47,10 +49,24 @@ export const Sidebar = () => {
         </nav>
       </div>
 
-      <Link to="/add" className={Styles.addBtn} title={collapsed ? 'Add Transaction' : undefined}>
-        <span className="icon">add</span>
-        {!collapsed && <span className={Styles.navLabel}>Add Transaction</span>}
-      </Link>
+      <div>
+        <button
+          className={Styles.themeToggle}
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={collapsed ? (theme === 'dark' ? 'Light mode' : 'Dark mode') : undefined}
+        >
+          <span className="icon">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+          {!collapsed && (
+            <span className={Styles.navLabel}>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+          )}
+        </button>
+
+        <Link to="/add" className={Styles.addBtn} title={collapsed ? 'Add Transaction' : undefined}>
+          <span className="icon">add</span>
+          {!collapsed && <span className={Styles.navLabel}>Add Transaction</span>}
+        </Link>
+      </div>
     </aside>
   )
 }

@@ -37,6 +37,7 @@ const categoryIcons = {
 
 export const Dashboard = () => {
   const allTransactions = useSelector((state) => state.budget.transactions)
+  const limits = useSelector((state) => state.budget.limits)
   const [month] = useState(currentMonth())
 
   const transactions = allTransactions.filter((t) => t.date && t.date.startsWith(month))
@@ -55,6 +56,32 @@ export const Dashboard = () => {
   const recent = [...transactions]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 3)
+
+  // categories that actually have a limit set
+  const limitedCategories = Object.keys(limits).filter((cat) => limits[cat] > 0)
+  const budgetRows = limitedCategories.map((cat) => ({
+    category: cat,
+    spent: categoryTotals[cat] || 0,
+    limit: limits[cat],
+  }))
+  const overBudget = budgetRows.filter((row) => row.spent > row.limit)
+  const closeToLimit = budgetRows.filter((row) => row.spent <= row.limit && row.spent / row.limit >= 0.8)
+
+  // build a real insight from actual data, not just a generic savings-rate line
+  let insightText
+  if (overBudget.length > 0) {
+    const names = overBudget.map((r) => r.category).join(', ')
+    insightText = `You're over budget in ${overBudget.length === 1 ? 'category' : 'categories'}: ${names}. Consider adjusting your limits or spending less there for the rest of the month.`
+  } else if (closeToLimit.length > 0) {
+    const names = closeToLimit.map((r) => r.category).join(', ')
+    insightText = `${names} ${closeToLimit.length === 1 ? 'is' : 'are'} close to its limit this month — worth keeping an eye on.`
+  } else if (budgetRows.length === 0) {
+    insightText = `You haven't set any budget limits yet. Set one in Settings to get real tracking here.`
+  } else if (savingsRate >= 20) {
+    insightText = `You're saving ${savingsRate}% of your income this month and staying within every budget you've set — solid.`
+  } else {
+    insightText = `You're within all your set budgets this month. Savings rate: ${savingsRate}%.`
+  }
 
   if (allTransactions.length === 0) {
     return (
@@ -144,6 +171,36 @@ export const Dashboard = () => {
               </ul>
             )}
           </div>
+
+          {budgetRows.length > 0 && (
+            <div className={Styles.activityCard}>
+              <div className={Styles.cardTopRow}>
+                <span className={Styles.cardLabel}>Budget Health</span>
+                <Link to="/settings" className={Styles.seeAll}>Manage limits</Link>
+              </div>
+              <ul className={Styles.budgetList}>
+                {budgetRows.map((row) => {
+                  const percent = Math.min((row.spent / row.limit) * 100, 100)
+                  const over = row.spent > row.limit
+                  return (
+                    <li key={row.category} className={Styles.budgetRow}>
+                      <div className={Styles.budgetLabelRow}>
+                        <span>{row.category}</span>
+                        <span className={`num ${Styles.budgetAmounts}`}>${row.spent} / ${row.limit}</span>
+                      </div>
+                      <div className={Styles.progressTrack}>
+                        <div
+                          className={Styles.progressFill}
+                          style={{ width: `${percent}%`, background: over ? 'var(--danger)' : 'var(--gradient-brand)' }}
+                        />
+                      </div>
+                      {over && <span className={Styles.overLabel}>over budget</span>}
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className={Styles.sideCol}>
@@ -193,14 +250,13 @@ export const Dashboard = () => {
               <span className="icon">auto_awesome</span>
               AI Insights
             </span>
-            <p className={Styles.insightsText}>
-              {savingsRate >= 20
-                ? `You're saving ${savingsRate}% of your income this month — ahead of the curve.`
-                : savingsRate >= 0
-                ? `You saved ${savingsRate}% of your income this month. Small tweaks could push this higher.`
-                : `Spending outpaced income this month by $${Math.abs(income - expenses)}.`}
-            </p>
-            <Link to="/settings" className={Styles.reviewBtn}>Review Limits</Link>
+            <p className={Styles.insightsText}>{insightText}</p>
+           <Link
+            to={`/settings?highlight=${overBudget.map((r) => r.category).join(',')}#budget-limits`}
+            className={Styles.reviewBtn}
+          >
+            Review Limits
+          </Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { addCategory, deleteCategory, setLimit } from '../features/budget/budgetSlice'
 import Styles from './Settings.module.css'
 
@@ -8,10 +9,21 @@ export const Settings = () => {
   const transactions = useSelector((state) => state.budget.transactions)
   const limits = useSelector((state) => state.budget.limits)
   const dispatch = useDispatch()
+  const location = useLocation()
+  const limitsRef = useRef(null)
 
   const [newCategory, setNewCategory] = useState('')
   const [error, setError] = useState('')
   const [confirmCat, setConfirmCat] = useState(null)
+
+  const highlighted = new URLSearchParams(location.search).get('highlight')
+  const highlightedCategories = highlighted ? highlighted.split(',').filter(Boolean) : []
+
+  useEffect(() => {
+    if (location.hash === '#budget-limits' && limitsRef.current) {
+      limitsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [location])
 
   const handleAdd = (e) => {
     e.preventDefault()
@@ -94,27 +106,35 @@ export const Settings = () => {
         Removing a category won't change past transactions — they'll keep their original category label.
       </p>
 
-      <h2 className={Styles.subHeadline}>Budget <span className={Styles.gradientText}>Limits</span></h2>
+      <h2 id="budget-limits" ref={limitsRef} className={Styles.subHeadline}>
+        Budget <span className={Styles.gradientText}>Limits</span>
+      </h2>
       <p className={Styles.subNote}>
         Set a monthly spending limit per category — these show up as "over budget" flags on your Dashboard.
       </p>
       <div className={Styles.card}>
         <ul className={Styles.limitList}>
-          {categories.map((cat) => (
-            <li key={cat} className={Styles.limitItem}>
-              <span className={Styles.itemName}>{cat}</span>
-              <div className={Styles.limitInputWrap}>
-                <span className={Styles.limitPrefix}>$</span>
-                <input
-                  className={Styles.limitInput}
-                  type="number"
-                  placeholder="No limit"
-                  value={limits[cat] || ''}
-                  onChange={(e) => handleSetLimit(cat, e.target.value)}
-                />
-              </div>
-            </li>
-          ))}
+          {categories.map((cat) => {
+            const isHighlighted = highlightedCategories.includes(cat)
+            return (
+              <li key={cat} className={`${Styles.limitItem} ${isHighlighted ? Styles.limitItemFlagged : ''}`}>
+                <span className={Styles.itemName}>
+                  {cat}
+                  {isHighlighted && <span className={Styles.flagTag}>over budget</span>}
+                </span>
+                <div className={Styles.limitInputWrap}>
+                  <span className={Styles.limitPrefix}>$</span>
+                  <input
+                    className={Styles.limitInput}
+                    type="number"
+                    placeholder="No limit"
+                    value={limits[cat] || ''}
+                    onChange={(e) => handleSetLimit(cat, e.target.value)}
+                  />
+                </div>
+              </li>
+            )
+          })}
         </ul>
       </div>
     </div>

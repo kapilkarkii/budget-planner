@@ -97,6 +97,14 @@
   margin-top: 20px;
 }
 
+.sectionLabel {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 14px 0 4px;
+}
+
 .list {
   list-style: none;
   margin: 0;
@@ -158,28 +166,12 @@
   margin-top: 18px;
 }
 
-@media (max-width: 640px) {
-  .wrapper {
-    padding: 20px 16px 40px;
-  }
-  .addCard {
-    flex-direction: column;
-  }
-}
-
-.sectionLabel {
-  display: block;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 14px 0 4px;
-}
-
 .subHeadline {
   font-size: 1.5rem;
   font-weight: 800;
   color: var(--text);
   margin: 32px 0 6px;
+  scroll-margin-top: 20px;
 }
 
 .subNote {
@@ -205,6 +197,27 @@
 
 .limitItem:last-child {
   border-bottom: none;
+}
+
+.limitItemFlagged {
+  background: var(--danger-soft);
+  margin: 0 -20px;
+  padding: 14px 20px;
+  border-radius: var(--radius-sm);
+  border-bottom: none !important;
+}
+
+.flagTag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--danger);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  vertical-align: middle;
 }
 
 .limitInputWrap {
@@ -239,4 +252,13 @@
 
 .limitInput:focus {
   outline: none;
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    padding: 20px 16px 40px;
+  }
+  .addCard {
+    flex-direction: column;
+  }
 }
