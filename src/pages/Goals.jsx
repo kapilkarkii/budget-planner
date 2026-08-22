@@ -70,8 +70,8 @@ export const Goals = () => {
     <div className={Styles.wrapper}>
       <div className={Styles.headerRow}>
         <div>
-          <h1 className={Styles.pageTitle}>Savings Goals</h1>
-          <p className={Styles.pageSubtitle}>Track your progress and celebrate milestones.</p>
+          <span className={Styles.eyebrow}>SAVINGS</span>
+          <h1 className={Styles.headline}>Active <span className={Styles.gradientText}>Goals</span></h1>
         </div>
       </div>
 
@@ -90,7 +90,7 @@ export const Goals = () => {
           value={target}
           onChange={(e) => { setTarget(e.target.value); setError('') }}
         />
-        <button className={`${Styles.addBtn} bouncyBtn`} type="submit">
+        <button className={Styles.addBtn} type="submit">
           <span className="icon">add</span>
           Add Goal
         </button>
@@ -106,35 +106,33 @@ export const Goals = () => {
           {goals.map((goal, i) => {
             const percent = Math.min((goal.saved / goal.target) * 100, 100)
             const reached = goal.saved >= goal.target
+            const confirming = confirmId === goal.id
 
             return (
               <div
                 key={goal.id}
-                className={`${Styles.goalCard} ${reached ? `${Styles.goalCardReached} bounceIn` : 'staggerItem'}`}
-                style={{ animationDelay: reached ? '0s' : `${i * 0.08}s` }}
+                className={`${Styles.goalCard} ${reached ? Styles.goalCardReached : ''} staggerItem`}
+                style={{ animationDelay: `${i * 0.06}s` }}
               >
                 <div className={Styles.goalHeader}>
-                  <span className={`icon ${Styles.goalIcon} wiggleOnHover`}>{goalIcons[i % goalIcons.length]}</span>
+                  <span className={`icon ${Styles.goalIcon}`}>{goalIcons[i % goalIcons.length]}</span>
                   <div className={Styles.goalHeaderText}>
                     <span className={Styles.goalName}>{goal.name}</span>
                     {reached && <span className={Styles.reachedTag}>Goal reached</span>}
                   </div>
                   <button
-                    className={`${Styles.deleteBtn} ${confirmId === goal.id ? Styles.confirmDelete : ''} bouncyBtn`}
+                    className={`${Styles.deleteBtn} ${confirming ? Styles.confirmDelete : ''}`}
                     onClick={() => handleDelete(goal.id)}
-                    aria-label={confirmId === goal.id ? `Confirm delete ${goal.name}` : `Delete ${goal.name}`}
+                    aria-label={confirming ? `Confirm delete ${goal.name}` : `Delete ${goal.name}`}
                   >
-                    <span className="icon">{confirmId === goal.id ? 'check' : 'close'}</span>
+                    <span className="icon">{confirming ? 'check' : 'close'}</span>
                   </button>
                 </div>
 
                 <div className={Styles.progressTrack}>
                   <div
-                    className={Styles.progressFill}
-                    style={{
-                      width: `${percent}%`,
-                      background: reached ? 'var(--warn)' : 'var(--secondary)',
-                    }}
+                    className={`${Styles.progressFill} ${reached ? Styles.progressReached : ''}`}
+                    style={{ width: `${percent}%` }}
                   />
                 </div>
 
@@ -151,10 +149,10 @@ export const Goals = () => {
                     value={contributions[goal.id] || ''}
                     onChange={(e) => setContributions((prev) => ({ ...prev, [goal.id]: e.target.value }))}
                   />
-                  <button className={`${Styles.contributeBtn} bouncyBtn`} onClick={() => handleContribute(goal.id)}>
+                  <button className={Styles.contributeBtn} onClick={() => handleContribute(goal.id)}>
                     Add
                   </button>
-                  <button className={`${Styles.withdrawBtn} bouncyBtn`} onClick={() => handleWithdraw(goal.id)}>
+                  <button className={Styles.withdrawBtn} onClick={() => handleWithdraw(goal.id)}>
                     Withdraw
                   </button>
                 </div>

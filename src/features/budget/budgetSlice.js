@@ -22,22 +22,15 @@ const loadLimits = () => {
 const loadCategories = () => {
   try {
     const saved = localStorage.getItem('categories')
-    if (!saved) return DEFAULT_CATEGORIES
+    if (!saved) return CATEGORIES
 
     const parsed = JSON.parse(saved)
-    if (!Array.isArray(parsed) || parsed.length === 0) return DEFAULT_CATEGORIES
+    if (!Array.isArray(parsed) || parsed.length === 0) return CATEGORIES
 
-    // Migrate old format (plain strings) to {name, type} objects
-    if (typeof parsed[0] === 'string') {
-      return parsed.map((name) => ({
-        name,
-        type: name === 'Salary' ? 'income' : 'expense',
-      }))
-    }
-
-    return parsed
+    // Normalize: if old cached data has {name, type} objects, extract just the name string
+    return parsed.map((c) => (typeof c === 'object' && c !== null ? c.name : c))
   } catch {
-    return DEFAULT_CATEGORIES
+    return CATEGORIES
   }
 }
 
@@ -75,14 +68,13 @@ const budgetSlice = createSlice({
       state.limits[action.payload.category] = action.payload.limit
     },
     addCategory: (state, action) => {
-      const name = action.payload.name.trim()
-      const type = action.payload.type
-      if (name && !state.categories.some((c) => c.name === name)) {
-        state.categories.push({ name, type })
+      const name = action.payload.trim()
+      if (name && !state.categories.includes(name)) {
+        state.categories.push(name)
       }
     },
     deleteCategory: (state, action) => {
-      state.categories = state.categories.filter((c) => c.name !== action.payload)
+      state.categories = state.categories.filter((c) => c !== action.payload)
     },
     addGoal: (state, action) => {
       state.goals.push({

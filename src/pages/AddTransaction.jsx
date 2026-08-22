@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { addTransaction, updateTransaction } from '../features/budget/budgetSlice'
+import { CATEGORIES } from '../constants/categories'
 import Styles from './AddTransaction.module.css'
 
 const today = () => new Date().toISOString().split('T')[0]
@@ -11,7 +12,6 @@ export const AddTransaction = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const transactions = useSelector((state) => state.budget.transactions)
-  const categories = useSelector((state) => state.budget.categories)
 
   const editingTransaction = id ? transactions.find((t) => t.id === Number(id)) : null
 
@@ -31,17 +31,6 @@ export const AddTransaction = () => {
       setDate(editingTransaction.date || today())
     }
   }, [editingTransaction])
-
-  const filteredCategories = categories.filter((c) => c.type === type)
-
-  const handleTypeChange = (newType) => {
-    setType(newType)
-    // Reset category if it no longer matches the selected type
-    setCategory((prev) => {
-      const stillValid = categories.some((c) => c.name === prev && c.type === newType)
-      return stillValid ? prev : ''
-    })
-  }
 
   const validate = () => {
     const newErrors = {}
@@ -86,17 +75,17 @@ export const AddTransaction = () => {
 
   return (
     <div className={Styles.wrapper}>
-      <h1 className={Styles.pageTitle}>{editingTransaction ? 'Edit Transaction' : 'Add Transaction'}</h1>
-      <p className={Styles.pageSubtitle}>
-        {editingTransaction ? 'Update the details below.' : 'Record a new income or expense.'}
-      </p>
+      <span className={Styles.eyebrow}>{editingTransaction ? 'EDIT' : 'NEW'}</span>
+      <h1 className={Styles.headline}>
+        {editingTransaction ? 'Edit ' : 'Add '}<span className={Styles.gradientText}>Transaction</span>
+      </h1>
 
       <form className={Styles.card} onSubmit={handleSubmit} noValidate>
         <div className={Styles.typeGroup}>
           <button
             type="button"
             className={`${Styles.typeBtn} ${type === 'expense' ? Styles.typeBtnExpenseActive : ''}`}
-            onClick={() => handleTypeChange('expense')}
+            onClick={() => setType('expense')}
           >
             <span className="icon">north</span>
             Expense
@@ -104,7 +93,7 @@ export const AddTransaction = () => {
           <button
             type="button"
             className={`${Styles.typeBtn} ${type === 'income' ? Styles.typeBtnIncomeActive : ''}`}
-            onClick={() => handleTypeChange('income')}
+            onClick={() => setType('income')}
           >
             <span className="icon">south</span>
             Income
@@ -156,16 +145,11 @@ export const AddTransaction = () => {
             onChange={(e) => setCategory(e.target.value)}
           >
             <option value="">Select category</option>
-            {filteredCategories.map((cat) => (
-              <option key={cat.name} value={cat.name}>{cat.name}</option>
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
           {errors.category && <span className={Styles.error}>{errors.category}</span>}
-          {filteredCategories.length === 0 && (
-            <span className={Styles.error}>
-              No {type} categories yet — add one in Settings
-            </span>
-          )}
         </div>
 
         <button className={Styles.submitBtn} type="submit">

@@ -4,33 +4,51 @@
   max-width: 900px;
 }
 
-.pageTitle {
-  font-size: 2rem;
-  font-weight: 700;
+.eyebrow {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
 }
 
-.pageSubtitle {
-  color: var(--ink-muted);
-  font-size: 0.95rem;
-  margin: 6px 0 24px;
-}
-
-.card {
-  background: var(--surface-lowest);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  box-shadow: var(--shadow-card);
+.headline {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text);
   margin-bottom: 24px;
 }
 
-.cardTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 6px;
+.gradientText {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  margin-bottom: 24px;
+}
+
+.cardLabel {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 500;
+  margin-bottom: 8px;
 }
 
 .mutedText {
-  color: var(--ink-faint);
+  color: var(--text-faint);
   font-size: 0.85rem;
   margin: 0 0 14px 0;
 }
@@ -38,43 +56,54 @@
 .compareRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px;
   margin-top: 14px;
 }
 
 .compareCol {
-  padding: 16px;
+  padding: 18px;
   border-radius: var(--radius);
-  background: var(--surface-low);
+  background: var(--surface-raised);
 }
 
 .compareLabel {
+  display: block;
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--ink-faint);
-  margin: 0 0 6px 0;
+  color: var(--text-faint);
+  margin-bottom: 8px;
 }
 
 .compareValue {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 8px 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 10px 0;
 }
 
-.up, .down {
+.trendPill {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.8rem;
-  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
-.up { color: var(--error); }
-.down { color: var(--secondary); }
+.trendPill span {
+  font-size: 15px;
+}
 
-.up span, .down span {
-  font-size: 16px;
+.trendUp {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.trendDown {
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .rankList {
@@ -83,28 +112,28 @@
   margin: 14px 0 0 0;
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
 .rankItem {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
+  padding: 12px;
+  border-radius: var(--radius);
 }
 
-.rankItem:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.rankItem:hover {
+  background: var(--surface-raised);
 }
 
 .rankNum {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: var(--surface-low);
-  color: var(--ink-muted);
-  font-size: 0.78rem;
+  background: var(--surface-raised);
+  color: var(--text-muted);
+  font-size: 0.8rem;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -120,34 +149,35 @@
 }
 
 .rankTitle {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.9rem;
+  color: var(--text);
 }
 
 .rankMeta {
   font-size: 0.78rem;
-  color: var(--ink-faint);
+  color: var(--text-faint);
 }
 
 .rankAmount {
-  font-weight: 600;
-  color: var(--error);
+  font-weight: 700;
+  color: var(--danger);
   white-space: nowrap;
 }
 
 .emptyState {
   text-align: center;
   padding: 80px 20px;
-  color: var(--ink-faint);
-  background: var(--surface-lowest);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-card);
+  color: var(--text-faint);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
 }
 
 .emptyLink {
   display: inline-block;
   margin-top: 12px;
-  color: var(--secondary);
+  color: var(--cyan);
   text-decoration: none;
   font-weight: 600;
 }

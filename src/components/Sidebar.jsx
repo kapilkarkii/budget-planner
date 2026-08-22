@@ -47,15 +47,10 @@ export const Sidebar = () => {
         </nav>
       </div>
 
-      <div className={Styles.userPill}>
-        <span className={Styles.userAvatar}>US</span>
-        {!collapsed && (
-          <div className={Styles.userInfo}>
-            <span className={Styles.userName}>Pro User</span>
-            <span className={Styles.userTag}>Premium</span>
-          </div>
-        )}
-      </div>
+      <Link to="/add" className={Styles.addBtn} title={collapsed ? 'Add Transaction' : undefined}>
+        <span className="icon">add</span>
+        {!collapsed && <span className={Styles.navLabel}>Add Transaction</span>}
+      </Link>
     </aside>
   )
 }

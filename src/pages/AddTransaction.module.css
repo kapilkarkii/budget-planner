@@ -4,22 +4,38 @@
   max-width: 560px;
 }
 
-.pageTitle {
-  font-size: 2rem;
-  font-weight: 700;
+.eyebrow {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
 }
 
-.pageSubtitle {
-  color: var(--ink-muted);
-  font-size: 0.95rem;
-  margin: 6px 0 24px;
+.headline {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.gradientText {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .card {
-  background: var(--surface-lowest);
-  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   padding: 28px;
-  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -37,10 +53,10 @@
   justify-content: center;
   gap: 6px;
   padding: 12px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: var(--surface-low);
-  color: var(--ink-muted);
+  background: var(--surface-raised);
+  color: var(--text-muted);
   cursor: pointer;
   font-weight: 600;
   font-size: 0.9rem;
@@ -48,15 +64,15 @@
 }
 
 .typeBtnExpenseActive {
-  border-color: var(--error);
-  background: var(--error-soft);
-  color: var(--error);
+  border-color: var(--danger);
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .typeBtnIncomeActive {
-  border-color: var(--secondary);
-  background: var(--secondary-soft);
-  color: var(--secondary);
+  border-color: var(--success);
+  background: var(--success-soft);
+  color: var(--success);
 }
 
 .field {
@@ -74,38 +90,41 @@
 .label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--ink-muted);
+  color: var(--text-muted);
 }
 
 .input {
   padding: 11px 14px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: var(--surface-low);
-  color: var(--ink);
+  background: var(--surface-raised);
+  color: var(--text);
   font-family: var(--font-body);
   font-size: 0.92rem;
 }
 
+.input::placeholder {
+  color: var(--text-faint);
+}
+
 .input:focus {
   outline: none;
-  border-color: var(--primary);
-  background: var(--surface-lowest);
+  border-color: var(--cyan);
 }
 
 .error {
-  color: var(--error);
+  color: var(--danger);
   font-size: 0.78rem;
   font-weight: 500;
 }
 
 .submitBtn {
   padding: 13px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-full);
   border: none;
-  background: var(--primary);
-  color: #ffffff;
-  font-weight: 600;
+  background: #ffffff;
+  color: #0a0a0f;
+  font-weight: 700;
   font-size: 0.95rem;
   cursor: pointer;
   margin-top: 4px;
@@ -113,7 +132,7 @@
 }
 
 .submitBtn:hover {
-  background: var(--primary-hover);
+  background: #e5e5e5;
 }
 
 @media (max-width: 640px) {

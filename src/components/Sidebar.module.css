@@ -198,3 +198,26 @@
     display: none;
   }
 }
+
+.addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px;
+  border-radius: var(--radius-sm);
+  background: var(--gradient-brand);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.88rem;
+  margin-top: 8px;
+}
+
+.addBtn:hover {
+  opacity: 0.9;
+}
+
+.collapsed .addBtn {
+  padding: 13px 8px;
+}
