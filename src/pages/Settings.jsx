@@ -203,7 +203,7 @@ export const Settings = () => {
           <div className={Styles.sideCard}>
             <span className={Styles.sideCardTitle}>About</span>
             <p className={Styles.aboutText}>
-              Ledgerly is a personal budgeting tool built with React and Redux. Track income and expenses, set budget limits, and work toward savings goals — all stored privately on your device.
+               Sable Ledger is a personal budgeting tool built with React and Redux. Track income and expenses, set budget limits, and work Sable Ledgertoward savings goals — all stored privately on your device.
             </p>
           </div>
         </div>

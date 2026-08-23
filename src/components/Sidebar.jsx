@@ -21,7 +21,7 @@ export const Sidebar = () => {
       <div>
         <div className={Styles.brand}>
           <span className={Styles.brandMark}>∞</span>
-          {!collapsed && <span className={Styles.brandName}>Ledgerly</span>}
+          {!collapsed && <span className={Styles.brandName}>Sable Ledger</span>}
           <button
             className={Styles.collapseBtn}
             onClick={() => setCollapsed((prev) => !prev)}
