@@ -7,6 +7,20 @@ import Styles from './AddTransaction.module.css'
 
 const today = () => new Date().toISOString().split('T')[0]
 
+const CATEGORY_TYPE_MAP = {
+  Food: 'expense',
+  Transport: 'expense',
+  Rent: 'expense',
+  Utilities: 'expense',
+  Entertainment: 'expense',
+  Shopping: 'expense',
+  'Other Expense': 'expense',
+  Salary: 'income',
+  Freelance: 'income',
+  Gift: 'income',
+  'Other Income': 'income',
+}
+
 export const AddTransaction = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -22,6 +36,8 @@ export const AddTransaction = () => {
   const [date, setDate] = useState(today())
   const [errors, setErrors] = useState({})
 
+  const categoryOptions = CATEGORIES.filter((cat) => CATEGORY_TYPE_MAP[cat] === type)
+
   useEffect(() => {
     if (editingTransaction) {
       setTitle(editingTransaction.title)
@@ -31,6 +47,11 @@ export const AddTransaction = () => {
       setDate(editingTransaction.date || today())
     }
   }, [editingTransaction])
+
+  const handleTypeChange = (newType) => {
+    setType(newType)
+    setCategory('')
+  }
 
   const validate = () => {
     const newErrors = {}
@@ -85,7 +106,7 @@ export const AddTransaction = () => {
           <button
             type="button"
             className={`${Styles.typeBtn} ${type === 'expense' ? Styles.typeBtnExpenseActive : ''}`}
-            onClick={() => setType('expense')}
+            onClick={() => handleTypeChange('expense')}
           >
             <span className="icon">north</span>
             Expense
@@ -93,7 +114,7 @@ export const AddTransaction = () => {
           <button
             type="button"
             className={`${Styles.typeBtn} ${type === 'income' ? Styles.typeBtnIncomeActive : ''}`}
-            onClick={() => setType('income')}
+            onClick={() => handleTypeChange('income')}
           >
             <span className="icon">south</span>
             Income
@@ -145,7 +166,7 @@ export const AddTransaction = () => {
             onChange={(e) => setCategory(e.target.value)}
           >
             <option value="">Select category</option>
-            {CATEGORIES.map((cat) => (
+            {categoryOptions.map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>

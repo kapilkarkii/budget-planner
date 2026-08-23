@@ -5,6 +5,9 @@ export const CATEGORIES = [
   'Utilities',
   'Entertainment',
   'Shopping',
+  'Other Expense',
   'Salary',
-  'Other',
+  'Freelance',
+  'Gift',
+  'Other Income',
 ]
