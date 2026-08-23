@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import { Sidebar } from './components/Sidebar'
+import { Onboarding } from './components/Onboarding'
 import { Dashboard } from './pages/Dashboard'
 import { Transactions } from './pages/Transactions'
 import { AddTransaction } from './pages/AddTransaction'
@@ -9,6 +11,10 @@ import { Goals } from './pages/Goals'
 import { Settings } from './pages/Settings'
 
 function App() {
+  const [showOnboarding, setShowOnboarding] = useState(
+    () => !localStorage.getItem('onboarded')
+  )
+
   return (
     <BrowserRouter>
       <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -25,6 +31,7 @@ function App() {
           </Routes>
         </div>
       </div>
+      {showOnboarding && <Onboarding onDismiss={() => setShowOnboarding(false)} />}
     </BrowserRouter>
   )
 }
