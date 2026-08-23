@@ -10,10 +10,10 @@ import { Settings } from './pages/Settings'
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="appShell">
+    <BrowserRouter basename="/budget-planner">
+      <div style={{ display: 'flex', minHeight: '100vh' }}>
         <Sidebar />
-        <div className="mainContent">
+        <div style={{ flex: 1, minWidth: 0 }}>
           <Routes>
             <Route path="/" element={<Dashboard/>}/>
             <Route path="/transactions" element={<Transactions/>}/>
