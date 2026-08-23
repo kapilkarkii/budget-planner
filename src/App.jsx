@@ -10,7 +10,7 @@ import { Settings } from './pages/Settings'
 
 function App() {
   return (
-    <BrowserRouter basename="/budget-planner">
+    <BrowserRouter>
       <div style={{ display: 'flex', minHeight: '100vh' }}>
         <Sidebar />
         <div style={{ flex: 1, minWidth: 0 }}>
