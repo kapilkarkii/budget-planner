@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
@@ -39,6 +39,7 @@ export const Dashboard = () => {
   const allTransactions = useSelector((state) => state.budget.transactions)
   const limits = useSelector((state) => state.budget.limits)
   const [month] = useState(currentMonth())
+  const [showNotifications, setShowNotifications] = useState(false)
 
   const transactions = allTransactions.filter((t) => t.date && t.date.startsWith(month))
 
@@ -57,7 +58,6 @@ export const Dashboard = () => {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 3)
 
-  // categories that actually have a limit set
   const limitedCategories = Object.keys(limits).filter((cat) => limits[cat] > 0)
   const budgetRows = limitedCategories.map((cat) => ({
     category: cat,
@@ -67,7 +67,6 @@ export const Dashboard = () => {
   const overBudget = budgetRows.filter((row) => row.spent > row.limit)
   const closeToLimit = budgetRows.filter((row) => row.spent <= row.limit && row.spent / row.limit >= 0.8)
 
-  // build a real insight from actual data, not just a generic savings-rate line
   let insightText
   if (overBudget.length > 0) {
     const names = overBudget.map((r) => r.category).join(', ')
@@ -82,6 +81,43 @@ export const Dashboard = () => {
   } else {
     insightText = `You're within all your set budgets this month. Savings rate: ${savingsRate}%.`
   }
+
+  const notifications = []
+  budgetRows.forEach((row) => {
+    if (row.spent > row.limit) {
+      notifications.push({
+        id: `over-${row.category}`,
+        icon: 'warning',
+        tone: 'danger',
+        text: `You're over budget in ${row.category} — $${row.spent} of $${row.limit}.`,
+      })
+    }
+  })
+  if (savingsRate < 0) {
+    notifications.push({
+      id: 'negative-savings',
+      icon: 'trending_down',
+      tone: 'danger',
+      text: `You spent more than you earned this month.`,
+    })
+  } else if (savingsRate >= 30) {
+    notifications.push({
+      id: 'good-savings',
+      icon: 'trending_up',
+      tone: 'success',
+      text: `Great month — you saved ${savingsRate}% of your income.`,
+    })
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(`.${Styles.notifWrap}`)) {
+        setShowNotifications(false)
+      }
+    }
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [])
 
   if (allTransactions.length === 0) {
     return (
@@ -103,9 +139,35 @@ export const Dashboard = () => {
           <h1 className={Styles.headline}>Financial <span className={Styles.gradientText}>Command Center</span></h1>
         </div>
         <div className={Styles.headerActions}>
-          <button className={Styles.bellBtn} aria-label="Notifications">
-            <span className="icon">notifications</span>
-          </button>
+          <div className={Styles.notifWrap}>
+            <button
+              className={Styles.bellBtn}
+              aria-label="Notifications"
+              onClick={() => setShowNotifications((prev) => !prev)}
+            >
+              <span className="icon">notifications</span>
+              {notifications.length > 0 && <span className={Styles.notifDot} />}
+            </button>
+            {showNotifications && (
+              <div className={Styles.notifPanel}>
+                <span className={Styles.notifPanelTitle}>Notifications</span>
+                {notifications.length === 0 ? (
+                  <p className={Styles.notifEmpty}>You're all caught up.</p>
+                ) : (
+                  <ul className={Styles.notifList}>
+                    {notifications.map((n) => (
+                      <li key={n.id} className={Styles.notifItem}>
+                        <span className={`icon ${Styles.notifIcon} ${n.tone === 'danger' ? Styles.notifDanger : Styles.notifSuccess}`}>
+                          {n.icon}
+                        </span>
+                        <span className={Styles.notifText}>{n.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
           <Link to="/add" className={Styles.newTxBtn}>
             <span className="icon">add</span>
             New Transaction
@@ -251,12 +313,12 @@ export const Dashboard = () => {
               AI Insights
             </span>
             <p className={Styles.insightsText}>{insightText}</p>
-           <Link
-            to={`/settings?highlight=${overBudget.map((r) => r.category).join(',')}#budget-limits`}
-            className={Styles.reviewBtn}
-          >
-            Review Limits
-          </Link>
+            <Link
+              to={`/settings?highlight=${overBudget.map((r) => r.category).join(',')}#budget-limits`}
+              className={Styles.reviewBtn}
+            >
+              Review Limits
+            </Link>
           </div>
         </div>
       </div>
