@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { deleteTransaction } from '../features/budget/budgetSlice'
 import { CATEGORIES } from '../constants/categories'
+import { getCurrencySymbol } from '../utils/currency'
 import Styles from './Transactions.module.css'
 
 const categoryIcons = {
@@ -18,6 +19,8 @@ const categoryIcons = {
 
 export const Transactions = () => {
   const transactions = useSelector((state) => state.budget.transactions)
+  const currency = useSelector((state) => state.budget.currency)
+  const sym = getCurrencySymbol(currency)
   const dispatch = useDispatch()
 
   const [categoryFilter, setCategoryFilter] = useState('all')
@@ -127,7 +130,7 @@ export const Transactions = () => {
                   <span className={Styles.txMeta}>{t.category} · {t.date}</span>
                 </div>
                 <span className={`${Styles.txAmount} num ${t.type === 'income' ? Styles.income : ''}`}>
-                  {t.type === 'income' ? '+' : '-'}${t.amount}
+                  {t.type === 'income' ? '+' : '-'}{sym}{t.amount}
                 </span>
                 <div className={Styles.actions}>
                   <Link to={`/edit/${t.id}`} className={Styles.iconBtn} aria-label={`Edit ${t.title}`}>

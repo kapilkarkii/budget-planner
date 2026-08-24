@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { addTransaction, updateTransaction } from '../features/budget/budgetSlice'
 import { CATEGORIES } from '../constants/categories'
+import { getCurrencySymbol } from '../utils/currency'
 import Styles from './AddTransaction.module.css'
 
 const today = () => new Date().toISOString().split('T')[0]
+const currentMonth = () => new Date().toISOString().slice(0, 7)
 
 const CATEGORY_TYPE_MAP = {
   Food: 'expense',
@@ -15,19 +17,20 @@ const CATEGORY_TYPE_MAP = {
   Entertainment: 'expense',
   Shopping: 'expense',
   'Other Expense': 'expense',
+  Other: 'expense',
   Salary: 'income',
   Freelance: 'income',
   Gift: 'income',
   'Other Income': 'income',
 }
 
-const currentMonth = () => new Date().toISOString().slice(0, 7)
-
 export const AddTransaction = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { id } = useParams()
   const transactions = useSelector((state) => state.budget.transactions)
+  const currency = useSelector((state) => state.budget.currency)
+  const sym = getCurrencySymbol(currency)
 
   const editingTransaction = id ? transactions.find((t) => t.id === Number(id)) : null
 
@@ -38,7 +41,7 @@ export const AddTransaction = () => {
   const [date, setDate] = useState(today())
   const [errors, setErrors] = useState({})
 
-  const categoryOptions = CATEGORIES.filter((cat) => CATEGORY_TYPE_MAP[cat] === type)
+  const categoryOptions = CATEGORIES.filter((cat) => (CATEGORY_TYPE_MAP[cat] || 'expense') === type)
 
   useEffect(() => {
     if (editingTransaction) {
@@ -96,7 +99,6 @@ export const AddTransaction = () => {
     }
   }
 
-  // side panel data
   const month = currentMonth()
   const monthTransactions = transactions.filter((t) => t.date && t.date.startsWith(month))
   const monthIncome = monthTransactions.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0)
@@ -159,7 +161,7 @@ export const AddTransaction = () => {
               <input
                 className={Styles.input}
                 type="number"
-                placeholder="0.00"
+                placeholder={`${sym}0.00`}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
@@ -204,11 +206,11 @@ export const AddTransaction = () => {
             <div className={Styles.miniStatRow}>
               <div>
                 <span className={Styles.miniStatLabel}>Income</span>
-                <p className={`${Styles.miniStatValue} ${Styles.income} num`}>${monthIncome}</p>
+                <p className={`${Styles.miniStatValue} ${Styles.income} num`}>{sym}{monthIncome}</p>
               </div>
               <div>
                 <span className={Styles.miniStatLabel}>Expenses</span>
-                <p className={`${Styles.miniStatValue} ${Styles.expense} num`}>${monthExpenses}</p>
+                <p className={`${Styles.miniStatValue} ${Styles.expense} num`}>{sym}{monthExpenses}</p>
               </div>
             </div>
           </div>

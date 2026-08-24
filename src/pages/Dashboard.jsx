@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import { CountUp } from '../components/CountUp'
+import { getCurrencySymbol } from '../utils/currency'
 import Styles from './Dashboard.module.css'
 
 const currentMonth = () => new Date().toISOString().slice(0, 7)
@@ -38,6 +39,8 @@ const categoryIcons = {
 export const Dashboard = () => {
   const allTransactions = useSelector((state) => state.budget.transactions)
   const limits = useSelector((state) => state.budget.limits)
+  const currency = useSelector((state) => state.budget.currency)
+  const sym = getCurrencySymbol(currency)
   const [month] = useState(currentMonth())
   const [showNotifications, setShowNotifications] = useState(false)
 
@@ -89,7 +92,7 @@ export const Dashboard = () => {
         id: `over-${row.category}`,
         icon: 'warning',
         tone: 'danger',
-        text: `You're over budget in ${row.category} — $${row.spent} of $${row.limit}.`,
+        text: `You're over budget in ${row.category} — ${sym}${row.spent} of ${sym}${row.limit}.`,
       })
     }
   })
@@ -186,7 +189,7 @@ export const Dashboard = () => {
               </span>
             </div>
             <p className={`${Styles.netWorthValue} num`}>
-              $<CountUp value={balance} />
+              {sym}<CountUp value={balance} />
             </p>
 
             <div className={Styles.statRow}>
@@ -194,14 +197,14 @@ export const Dashboard = () => {
                 <span className={`icon ${Styles.statIcon} ${Styles.statIconIncome}`}>south</span>
                 <div>
                   <span className={Styles.statLabel}>Income</span>
-                  <p className={`${Styles.statValue} num`}>${income}</p>
+                  <p className={`${Styles.statValue} num`}>{sym}{income}</p>
                 </div>
               </div>
               <div className={Styles.statBlock}>
                 <span className={`icon ${Styles.statIcon} ${Styles.statIconExpense}`}>north</span>
                 <div>
                   <span className={Styles.statLabel}>Expenses</span>
-                  <p className={`${Styles.statValue} num`}>${expenses}</p>
+                  <p className={`${Styles.statValue} num`}>{sym}{expenses}</p>
                 </div>
               </div>
             </div>
@@ -226,7 +229,7 @@ export const Dashboard = () => {
                       <span className={Styles.txMeta}>{t.category} · {t.date}</span>
                     </div>
                     <span className={`${Styles.txAmount} num ${t.type === 'income' ? Styles.income : ''}`}>
-                      {t.type === 'income' ? '+' : '-'}${t.amount}
+                      {t.type === 'income' ? '+' : '-'}{sym}{t.amount}
                     </span>
                   </li>
                 ))}
@@ -248,7 +251,7 @@ export const Dashboard = () => {
                     <li key={row.category} className={Styles.budgetRow}>
                       <div className={Styles.budgetLabelRow}>
                         <span>{row.category}</span>
-                        <span className={`num ${Styles.budgetAmounts}`}>${row.spent} / ${row.limit}</span>
+                        <span className={`num ${Styles.budgetAmounts}`}>{sym}{row.spent} / {sym}{row.limit}</span>
                       </div>
                       <div className={Styles.progressTrack}>
                         <div
@@ -292,7 +295,7 @@ export const Dashboard = () => {
                   </ResponsiveContainer>
                   <div className={Styles.donutCenter}>
                     <span className={Styles.donutCenterLabel}>Total</span>
-                    <span className={`${Styles.donutCenterValue} num`}>${expenses}</span>
+                    <span className={`${Styles.donutCenterValue} num`}>{sym}{expenses}</span>
                   </div>
                 </div>
                 <div className={Styles.legendRow}>

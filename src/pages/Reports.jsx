@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts'
+import { getCurrencySymbol } from '../utils/currency'
 import Styles from './Reports.module.css'
 
 const tooltipStyle = {
@@ -18,6 +19,8 @@ const lineColors = ['#38bdf8', '#a855f7', '#10b981', '#f59e0b', '#ef4444']
 
 export const Reports = () => {
   const transactions = useSelector((state) => state.budget.transactions)
+  const currency = useSelector((state) => state.budget.currency)
+  const sym = getCurrencySymbol(currency)
 
   if (transactions.length === 0) {
     return (
@@ -106,7 +109,7 @@ export const Reports = () => {
           <div className={Styles.compareRow}>
             <div className={Styles.compareCol}>
               <span className={Styles.compareLabel}>Expenses</span>
-              <p className={`${Styles.compareValue} num`}>${thisMonth.expenses}</p>
+              <p className={`${Styles.compareValue} num`}>{sym}{thisMonth.expenses}</p>
               {expenseChange !== null && (
                 <span className={`${Styles.trendPill} ${expenseChange > 0 ? Styles.trendDown : Styles.trendUp}`}>
                   <span className="icon">{expenseChange > 0 ? 'trending_up' : 'trending_down'}</span>
@@ -116,7 +119,7 @@ export const Reports = () => {
             </div>
             <div className={Styles.compareCol}>
               <span className={Styles.compareLabel}>Income</span>
-              <p className={`${Styles.compareValue} num`}>${thisMonth.income}</p>
+              <p className={`${Styles.compareValue} num`}>{sym}{thisMonth.income}</p>
               {incomeChange !== null && (
                 <span className={`${Styles.trendPill} ${incomeChange >= 0 ? Styles.trendUp : Styles.trendDown}`}>
                   <span className="icon">{incomeChange > 0 ? 'trending_up' : 'trending_down'}</span>
@@ -179,7 +182,7 @@ export const Reports = () => {
                 <span className={Styles.rankTitle}>{t.title}</span>
                 <span className={Styles.rankMeta}>{t.category}</span>
               </div>
-              <span className={`${Styles.rankAmount} num`}>${t.amount}</span>
+              <span className={`${Styles.rankAmount} num`}>{sym}{t.amount}</span>
             </li>
           ))}
         </ul>

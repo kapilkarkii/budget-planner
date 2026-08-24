@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { addCategory, deleteCategory, setLimit } from '../features/budget/budgetSlice'
+import { addCategory, deleteCategory, setLimit, setCurrency } from '../features/budget/budgetSlice'
 import { useTheme } from '../hooks/useTheme'
+import { CURRENCIES } from '../utils/currency'
 import Styles from './Settings.module.css'
 
 export const Settings = () => {
@@ -10,6 +11,7 @@ export const Settings = () => {
   const transactions = useSelector((state) => state.budget.transactions)
   const goals = useSelector((state) => state.budget.goals)
   const limits = useSelector((state) => state.budget.limits)
+  const currency = useSelector((state) => state.budget.currency)
   const dispatch = useDispatch()
   const location = useLocation()
   const limitsRef = useRef(null)
@@ -71,10 +73,9 @@ export const Settings = () => {
     localStorage.removeItem('limits')
     localStorage.removeItem('categories')
     localStorage.removeItem('goals')
+    localStorage.removeItem('currency')
     window.location.reload()
   }
-
-  const totalDataPoints = transactions.length + goals.length + Object.keys(limits).length
 
   return (
     <div className={Styles.wrapper}>
@@ -143,7 +144,7 @@ export const Settings = () => {
                       {isHighlighted && <span className={Styles.flagTag}>over budget</span>}
                     </span>
                     <div className={Styles.limitInputWrap}>
-                      <span className={Styles.limitPrefix}>$</span>
+                      <span className={Styles.limitPrefix}>{CURRENCIES[currency]?.symbol || '$'}</span>
                       <input
                         className={Styles.limitInput}
                         type="number"
@@ -160,6 +161,19 @@ export const Settings = () => {
         </div>
 
         <div className={Styles.sideCol}>
+          <div className={Styles.sideCard}>
+            <span className={Styles.sideCardTitle}>Currency</span>
+            <select
+              className={Styles.input}
+              value={currency}
+              onChange={(e) => dispatch(setCurrency(e.target.value))}
+            >
+              {Object.entries(CURRENCIES).map(([code, { label }]) => (
+                <option key={code} value={code}>{code} — {label}</option>
+              ))}
+            </select>
+          </div>
+
           <div className={Styles.sideCard}>
             <span className={Styles.sideCardTitle}>Appearance</span>
             <button className={Styles.themeRow} onClick={toggleTheme}>
@@ -203,7 +217,7 @@ export const Settings = () => {
           <div className={Styles.sideCard}>
             <span className={Styles.sideCardTitle}>About</span>
             <p className={Styles.aboutText}>
-               Sable Ledger is a personal budgeting tool built with React and Redux. Track income and expenses, set budget limits, and work Sable Ledgertoward savings goals — all stored privately on your device.
+              Sable Ledger is a personal budgeting tool built with React and Redux. Track income and expenses, set budget limits, and work toward savings goals — all stored privately on your device.
             </p>
           </div>
         </div>

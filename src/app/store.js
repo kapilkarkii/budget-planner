@@ -13,4 +13,5 @@ store.subscribe(() => {
   localStorage.setItem('limits', JSON.stringify(state.budget.limits))
   localStorage.setItem('categories', JSON.stringify(state.budget.categories))
   localStorage.setItem('goals', JSON.stringify(state.budget.goals))
+  localStorage.setItem('currency', state.budget.currency)
 })

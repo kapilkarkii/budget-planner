@@ -2,12 +2,15 @@ import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addGoal, deleteGoal, contributeToGoal, withdrawFromGoal } from '../features/budget/budgetSlice'
 import { fireConfetti } from '../utils/confetti'
+import { getCurrencySymbol } from '../utils/currency'
 import Styles from './Goals.module.css'
 
 const goalIcons = ['flag', 'savings', 'flight', 'home', 'school', 'medical_services', 'redeem', 'directions_car']
 
 export const Goals = () => {
   const goals = useSelector((state) => state.budget.goals)
+  const currency = useSelector((state) => state.budget.currency)
+  const sym = getCurrencySymbol(currency)
   const dispatch = useDispatch()
 
   const [name, setName] = useState('')
@@ -86,11 +89,11 @@ export const Goals = () => {
         <input
           className={Styles.inputSmall}
           type="number"
-          placeholder="Target amount"
+          placeholder={`${sym} Target amount`}
           value={target}
           onChange={(e) => { setTarget(e.target.value); setError('') }}
         />
-        <button className={Styles.addBtn} type="submit">
+        <button className={`${Styles.addBtn} bouncyBtn`} type="submit">
           <span className="icon">add</span>
           Add Goal
         </button>
@@ -111,11 +114,11 @@ export const Goals = () => {
             return (
               <div
                 key={goal.id}
-                className={`${Styles.goalCard} ${reached ? Styles.goalCardReached : ''} staggerItem`}
-                style={{ animationDelay: `${i * 0.06}s` }}
+                className={`${Styles.goalCard} ${reached ? `${Styles.goalCardReached} bounceIn` : 'staggerItem'}`}
+                style={{ animationDelay: reached ? '0s' : `${i * 0.06}s` }}
               >
                 <div className={Styles.goalHeader}>
-                  <span className={`icon ${Styles.goalIcon}`}>{goalIcons[i % goalIcons.length]}</span>
+                  <span className={`icon ${Styles.goalIcon} wiggleOnHover`}>{goalIcons[i % goalIcons.length]}</span>
                   <div className={Styles.goalHeaderText}>
                     <span className={Styles.goalName}>{goal.name}</span>
                     {reached && <span className={Styles.reachedTag}>Goal reached</span>}
@@ -137,7 +140,7 @@ export const Goals = () => {
                 </div>
 
                 <div className={Styles.goalMeta}>
-                  <span className={`num ${Styles.goalAmounts}`}>{goal.saved} of {goal.target}</span>
+                  <span className={`num ${Styles.goalAmounts}`}>{sym}{goal.saved} of {sym}{goal.target}</span>
                   <span className={Styles.goalPercent}>{Math.round(percent)}%</span>
                 </div>
 
@@ -149,10 +152,10 @@ export const Goals = () => {
                     value={contributions[goal.id] || ''}
                     onChange={(e) => setContributions((prev) => ({ ...prev, [goal.id]: e.target.value }))}
                   />
-                  <button className={Styles.contributeBtn} onClick={() => handleContribute(goal.id)}>
+                  <button className={`${Styles.contributeBtn} bouncyBtn`} onClick={() => handleContribute(goal.id)}>
                     Add
                   </button>
-                  <button className={Styles.withdrawBtn} onClick={() => handleWithdraw(goal.id)}>
+                  <button className={`${Styles.withdrawBtn} bouncyBtn`} onClick={() => handleWithdraw(goal.id)}>
                     Withdraw
                   </button>
                 </div>

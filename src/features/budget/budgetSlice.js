@@ -23,11 +23,8 @@ const loadCategories = () => {
   try {
     const saved = localStorage.getItem('categories')
     if (!saved) return CATEGORIES
-
     const parsed = JSON.parse(saved)
     if (!Array.isArray(parsed) || parsed.length === 0) return CATEGORIES
-
-    // Normalize: if old cached data has {name, type} objects, extract just the name string
     return parsed.map((c) => (typeof c === 'object' && c !== null ? c.name : c))
   } catch {
     return CATEGORIES
@@ -43,11 +40,20 @@ const loadGoals = () => {
   }
 }
 
+const loadCurrency = () => {
+  try {
+    return localStorage.getItem('currency') || 'USD'
+  } catch {
+    return 'USD'
+  }
+}
+
 const initialState = {
   transactions: loadTransactions(),
   limits: loadLimits(),
   categories: loadCategories(),
   goals: loadGoals(),
+  currency: loadCurrency(),
 }
 
 const budgetSlice = createSlice({
@@ -97,6 +103,9 @@ const budgetSlice = createSlice({
         goal.saved = Math.max(0, goal.saved - action.payload.amount)
       }
     },
+    setCurrency: (state, action) => {
+      state.currency = action.payload
+    },
   },
 })
 
@@ -111,5 +120,6 @@ export const {
   deleteGoal,
   contributeToGoal,
   withdrawFromGoal,
+  setCurrency,
 } = budgetSlice.actions
 export default budgetSlice.reducer
