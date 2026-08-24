@@ -10,6 +10,7 @@ import { AddTransaction } from './pages/AddTransaction'
 import { Reports } from './pages/Reports'
 import { Goals } from './pages/Goals'
 import { Settings } from './pages/Settings'
+import { BottomNav } from './components/BottomNav'
 
 function App() {
   const [showOnboarding, setShowOnboarding] = useState(
@@ -31,6 +32,7 @@ function App() {
             <Route path="/settings" element={<Settings/>}/>
           </Routes>
         </div>
+        <BottomNav/>
       </div>
       {showOnboarding && <Onboarding onDismiss={() => setShowOnboarding(false)} />}
     </BrowserRouter>
