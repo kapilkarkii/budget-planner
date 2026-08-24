@@ -11,6 +11,7 @@ import { Reports } from './pages/Reports'
 import { Goals } from './pages/Goals'
 import { Settings } from './pages/Settings'
 import { BottomNav } from './components/BottomNav'
+import { UpdatePrompt } from './components/UpdatePrompt'
 
 function App() {
   const [showOnboarding, setShowOnboarding] = useState(
@@ -35,6 +36,7 @@ function App() {
         <BottomNav/>
       </div>
       {showOnboarding && <Onboarding onDismiss={() => setShowOnboarding(false)} />}
+      <UpdatePrompt />
     </BrowserRouter>
   )
 }
