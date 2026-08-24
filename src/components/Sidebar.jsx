@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../hooks/useTheme'
+import { useInstallPrompt } from '../hooks/useInstallPrompt'
 import Styles from './Sidebar.module.css'
 
 const navItems = [
@@ -15,12 +16,13 @@ export const Sidebar = () => {
   const location = useLocation()
   const [collapsed, setCollapsed] = useState(false)
   const { theme, toggleTheme } = useTheme()
+  const { canInstall, promptInstall } = useInstallPrompt()
 
   return (
     <aside className={`${Styles.sidebar} ${collapsed ? Styles.collapsed : ''}`}>
       <div>
         <div className={Styles.brand}>
-          <span className={Styles.brandMark}>∞</span>
+          <span className={Styles.brandMark}> <img src="/icon-192.png" alt="Sable Ledger" className={Styles.brandMarkImg} /></span>
           {!collapsed && <span className={Styles.brandName}>Sable Ledger</span>}
           <button
             className={Styles.collapseBtn}
@@ -50,6 +52,17 @@ export const Sidebar = () => {
       </div>
 
       <div>
+        {canInstall && (
+          <button
+            className={Styles.installBtn}
+            onClick={promptInstall}
+            title={collapsed ? 'Install App' : undefined}
+          >
+            <span className="icon">download</span>
+            {!collapsed && <span className={Styles.navLabel}>Install App</span>}
+          </button>
+        )}
+
         <button
           className={Styles.themeToggle}
           onClick={toggleTheme}

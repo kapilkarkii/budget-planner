@@ -2,9 +2,9 @@
   width: 244px;
   flex-shrink: 0;
   min-height: 100vh;
-  background: var(--bg);
+  background: var(--surface-lowest, var(--surface));
   border-right: 1px solid var(--border);
-  padding: 20px 14px;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -88,45 +88,69 @@
   font-size: 20px;
 }
 
-.userPill {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--border);
+.navLabel {
+  display: inline;
 }
 
-.userAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--gradient-brand);
-  color: #ffffff;
+.installBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.72rem;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.userInfo {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.userName {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.userTag {
-  font-size: 0.7rem;
+  gap: 8px;
+  width: 100%;
+  padding: 11px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--purple);
+  background: transparent;
   color: var(--purple);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  margin-bottom: 8px;
+}
+
+.installBtn:hover {
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.themeToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  margin-bottom: 8px;
+}
+
+.themeToggle:hover {
+  border-color: var(--purple);
+  color: var(--purple);
+}
+
+.addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--gradient-brand);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.addBtn:hover {
+  opacity: 0.9;
 }
 
 .collapseBtn {
@@ -135,7 +159,7 @@
   height: 24px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-raised);
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -167,10 +191,6 @@
   padding: 11px;
 }
 
-.sidebar.collapsed .userPill {
-  justify-content: center;
-}
-
 @media (max-width: 900px) {
   .sidebar {
     width: 100%;
@@ -191,57 +211,9 @@
   .navLabel {
     display: none;
   }
-  .userPill {
+  .installBtn, .themeToggle {
     display: none;
   }
-  .collapseBtn {
-    display: none;
-  }
-}
-
-.addBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 13px;
-  border-radius: var(--radius-sm);
-  background: var(--gradient-brand);
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.88rem;
-  margin-top: 8px;
-}
-
-.addBtn:hover {
-  opacity: 0.9;
-}
-
-.collapsed .addBtn {
-  padding: 13px 8px;
-}
-
-.themeToggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 11px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-family: var(--font-body);
-  margin-bottom: 8px;
-}
-
-.themeToggle:hover {
-  border-color: var(--purple);
-  color: var(--purple);
 }
 
 @media (max-width: 480px) {
@@ -255,3 +227,4 @@
     padding: 8px;
   }
 }
+.brandMarkImg { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; }
