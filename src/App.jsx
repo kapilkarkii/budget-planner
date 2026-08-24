@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
+import Styles from './App.module.css'
 import { Sidebar } from './components/Sidebar'
 import { Onboarding } from './components/Onboarding'
 import { Dashboard } from './pages/Dashboard'
@@ -17,9 +18,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div style={{ display: 'flex', minHeight: '100vh' }}>
+      <div className={Styles.layout}>
         <Sidebar />
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className={Styles.content}>
           <Routes>
             <Route path="/" element={<Dashboard/>}/>
             <Route path="/transactions" element={<Transactions/>}/>
