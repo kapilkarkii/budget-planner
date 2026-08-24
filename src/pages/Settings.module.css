@@ -419,3 +419,19 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 16px 12px 32px;
+  }
+  .limitItem {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .limitInputWrap {
+    width: 100%;
+  }
+  .dataStatRow {
+    flex-wrap: wrap;
+  }
+}

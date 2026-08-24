@@ -243,3 +243,15 @@
   border-color: var(--purple);
   color: var(--purple);
 }
+
+@media (max-width: 480px) {
+  .sidebar {
+    padding: 10px 12px;
+  }
+  .brandName {
+    display: none;
+  }
+  .navItem {
+    padding: 8px;
+  }
+}

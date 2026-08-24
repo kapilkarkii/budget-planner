@@ -241,3 +241,22 @@
     padding: 20px 16px 40px;
   }
 }
+
+@media (max-width: 640px) {
+  .wrapper {
+    padding: 20px 16px 40px;
+  }
+  .filterBar {
+    flex-direction: column;
+  }
+  .txRow {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .txInfo {
+    min-width: 140px;
+  }
+  .actions {
+    margin-left: auto;
+  }
+}

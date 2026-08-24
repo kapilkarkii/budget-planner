@@ -149,3 +149,10 @@ h1, h2, h3 {
     transition-duration: 0.01ms !important;
   }
 }
+
+@media (max-width: 768px) {
+  body::before, body::after {
+    width: 70%;
+    height: 30%;
+  }
+}

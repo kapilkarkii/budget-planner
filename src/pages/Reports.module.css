@@ -190,3 +190,15 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 16px 12px 32px;
+  }
+  .card {
+    padding: 18px;
+  }
+  .rankItem {
+    flex-wrap: wrap;
+  }
+}

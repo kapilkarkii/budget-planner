@@ -297,3 +297,21 @@
     padding: 20px 16px 40px;
   }
 }
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 16px 12px 32px;
+  }
+  .goalCard {
+    padding: 16px;
+  }
+  .addCard {
+    flex-direction: column;
+  }
+  .contributeRow {
+    flex-direction: column;
+  }
+  .contributeRow button {
+    width: 100%;
+  }
+}
