@@ -69,3 +69,31 @@
 .actionItem.navItemActive .navIcon {
   box-shadow: 0 4px 20px rgba(168, 85, 247, 0.6);
 }
+
+.installBanner {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .installBanner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: fixed;
+    bottom: 76px;
+    left: 12px;
+    right: 12px;
+    padding: 12px;
+    border-radius: var(--radius-full);
+    border: none;
+    background: var(--gradient-brand);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    z-index: 45;
+    font-family: var(--font-body);
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.35);
+  }
+}

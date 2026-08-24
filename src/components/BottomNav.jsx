@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import Styles from './BottomNav.module.css'
+import { useInstallPrompt } from '../hooks/useInstallPrompt'
 
 const navItems = [
   { to: '/', label: 'Home', icon: 'grid_view' },
@@ -11,8 +12,16 @@ const navItems = [
 
 export const BottomNav = () => {
   const location = useLocation()
+  const { canInstall, promptInstall } = useInstallPrompt()
 
-  return (
+ return (
+  <>
+    {canInstall && (
+      <button className={Styles.installBanner} onClick={promptInstall}>
+        <span className="icon">download</span>
+        Install Sable Ledger
+      </button>
+    )}
     <nav className={Styles.bottomNav}>
       {navItems.map((item) => {
         const active = location.pathname === item.to
@@ -28,5 +37,6 @@ export const BottomNav = () => {
         )
       })}
     </nav>
-  )
+  </>
+)
 }
