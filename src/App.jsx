@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Styles from './App.module.css'
@@ -24,6 +24,7 @@ function App() {
   const [showOnboarding, setShowOnboarding] = useState(
     () => !localStorage.getItem('onboarded')
   )
+  const budgetStatus = useSelector((state) => state.budget.status)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -47,8 +48,7 @@ function App() {
 
     return () => subscription.unsubscribe()
   }, [dispatch])
-
-  if (loadingSession) {
+  if (loadingSession || (session && budgetStatus !== 'succeeded' && budgetStatus !== 'failed')) {
     return (
       <div className={Styles.loadingScreen}>
         <div className={Styles.loadingSpinner} />
