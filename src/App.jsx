@@ -10,6 +10,7 @@ import { BottomNav } from './components/BottomNav'
 import { Onboarding } from './components/Onboarding'
 import { UpdatePrompt } from './components/UpdatePrompt'
 import { AuthPage } from './components/AuthPage'
+import { ResetPassword } from './components/ResetPassword'
 import { Dashboard } from './pages/Dashboard'
 import { Transactions } from './pages/Transactions'
 import { AddTransaction } from './pages/AddTransaction'
@@ -48,6 +49,13 @@ function App() {
 
     return () => subscription.unsubscribe()
   }, [dispatch])
+
+  const isResetPasswordFlow = window.location.pathname === '/reset-password'
+
+  if (isResetPasswordFlow) {
+    return <ResetPassword onComplete={() => { window.location.href = '/' }} />
+  }
+
   if (loadingSession || (session && budgetStatus !== 'succeeded' && budgetStatus !== 'failed')) {
     return (
       <div className={Styles.loadingScreen}>

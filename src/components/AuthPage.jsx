@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabaseClient'
 import Styles from './AuthPage.module.css'
 
 export const AuthPage = () => {
-  const [mode, setMode] = useState('login') // 'login' | 'signup'
+  const [mode, setMode] = useState('login') // 'login' | 'signup' | 'forgot'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -14,6 +14,24 @@ export const AuthPage = () => {
     e.preventDefault()
     setError('')
     setMessage('')
+
+    if (mode === 'forgot') {
+      if (!email) {
+        setError('Enter your email address.')
+        return
+      }
+      setLoading(true)
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      })
+      setLoading(false)
+      if (resetError) {
+        setError(resetError.message)
+      } else {
+        setMessage('Check your email for a password reset link.')
+      }
+      return
+    }
 
     if (!email || !password) {
       setError('Enter both email and password.')
@@ -41,8 +59,13 @@ export const AuthPage = () => {
       if (signInError) {
         setError(signInError.message)
       }
-      // on success, the auth listener in App.jsx will detect the session and redirect
     }
+  }
+
+  const titles = {
+    login: 'Log in to your account',
+    signup: 'Create your account',
+    forgot: 'Reset your password',
   }
 
   return (
@@ -50,9 +73,7 @@ export const AuthPage = () => {
       <div className={Styles.card}>
         <div className={Styles.brandMark}>∞</div>
         <h1 className={Styles.title}>Sable Ledger</h1>
-        <p className={Styles.subtitle}>
-          {mode === 'login' ? 'Log in to your account' : 'Create your account'}
-        </p>
+        <p className={Styles.subtitle}>{titles[mode]}</p>
 
         <form onSubmit={handleSubmit} className={Styles.form}>
           <div className={Styles.field}>
@@ -66,23 +87,40 @@ export const AuthPage = () => {
               autoComplete="email"
             />
           </div>
-          <div className={Styles.field}>
-            <label className={Styles.label}>Password</label>
-            <input
-              className={Styles.input}
-              type="password"
-              placeholder="At least 6 characters"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-            />
-          </div>
+
+          {mode !== 'forgot' && (
+            <div className={Styles.field}>
+              <label className={Styles.label}>Password</label>
+              <input
+                className={Styles.input}
+                type="password"
+                placeholder="At least 6 characters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              />
+            </div>
+          )}
+
+          {mode === 'login' && (
+            <button
+              type="button"
+              className={Styles.forgotLink}
+              onClick={() => { setMode('forgot'); setError(''); setMessage('') }}
+            >
+              Forgot password?
+            </button>
+          )}
 
           {error && <span className={Styles.error}>{error}</span>}
           {message && <span className={Styles.message}>{message}</span>}
 
           <button className={Styles.submitBtn} type="submit" disabled={loading}>
-            {loading ? 'Please wait…' : mode === 'login' ? 'Log In' : 'Sign Up'}
+            {loading
+              ? 'Please wait…'
+              : mode === 'login' ? 'Log In'
+              : mode === 'signup' ? 'Sign Up'
+              : 'Send Reset Link'}
           </button>
         </form>
 
@@ -94,7 +132,9 @@ export const AuthPage = () => {
             setMessage('')
           }}
         >
-          {mode === 'login'
+          {mode === 'forgot'
+            ? 'Back to log in'
+            : mode === 'login'
             ? "Don't have an account? Sign up"
             : 'Already have an account? Log in'}
         </button>

@@ -126,3 +126,19 @@
 .switchBtn:hover {
   color: var(--purple);
 }
+
+.forgotLink {
+  background: none;
+  border: none;
+  color: var(--purple);
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-align: right;
+  font-family: var(--font-body);
+  padding: 0;
+  margin-top: -8px;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
