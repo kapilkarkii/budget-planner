@@ -32,7 +32,7 @@ export const AddTransaction = () => {
   const currency = useSelector((state) => state.budget.currency)
   const sym = getCurrencySymbol(currency)
 
-  const editingTransaction = id ? transactions.find((t) => t.id === Number(id)) : null
+  const editingTransaction = id ? transactions.find((t) => t.id === id) : null
 
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
@@ -68,36 +68,35 @@ export const AddTransaction = () => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!validate()) return
+ const handleSubmit = (e) => {
+  e.preventDefault()
+  if (!validate()) return
 
-    if (editingTransaction) {
-      dispatch(updateTransaction({
-        id: editingTransaction.id,
-        title,
-        amount: Number(amount),
-        type,
-        category,
-        date,
-      }))
-      navigate('/transactions')
-    } else {
-      dispatch(addTransaction({
-        id: Date.now(),
-        title,
-        amount: Number(amount),
-        type,
-        category,
-        date,
-      }))
-      setTitle('')
-      setAmount('')
-      setCategory('')
-      setDate(today())
-      setErrors({})
-    }
+  if (editingTransaction) {
+    dispatch(updateTransaction({
+      id: editingTransaction.id,
+      title,
+      amount: Number(amount),
+      type,
+      category,
+      date,
+    }))
+    navigate('/transactions')
+  } else {
+    dispatch(addTransaction({
+      title,
+      amount: Number(amount),
+      type,
+      category,
+      date,
+    }))
+    setTitle('')
+    setAmount('')
+    setCategory('')
+    setDate(today())
+    setErrors({})
   }
+}
 
   const month = currentMonth()
   const monthTransactions = transactions.filter((t) => t.date && t.date.startsWith(month))
