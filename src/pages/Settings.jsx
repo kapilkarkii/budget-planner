@@ -5,6 +5,7 @@ import { addCategory, deleteCategory, setLimit, setCurrency } from '../features/
 import { useTheme } from '../hooks/useTheme'
 import { CURRENCIES } from '../utils/currency'
 import Styles from './Settings.module.css'
+import { supabase } from '../lib/supabaseClient'
 
 export const Settings = () => {
   const categories = useSelector((state) => state.budget.categories)
@@ -24,6 +25,9 @@ export const Settings = () => {
 
   const highlighted = new URLSearchParams(location.search).get('highlight')
   const highlightedCategories = highlighted ? highlighted.split(',').filter(Boolean) : []
+  const handleLogout = async () => {
+  await supabase.auth.signOut()
+  }
 
   useEffect(() => {
     if (location.hash === '#budget-limits' && limitsRef.current) {
@@ -219,6 +223,13 @@ export const Settings = () => {
             <p className={Styles.aboutText}>
               Sable Ledger is a personal budgeting tool built with React and Redux. Track income and expenses, set budget limits, and work toward savings goals — all stored privately on your device.
             </p>
+          </div>
+          <div className={Styles.sideCard}>
+          <span className={Styles.sideCardTitle}>Account</span>
+          <button className={Styles.logoutBtn} onClick={handleLogout}>
+            <span className="icon">logout</span>
+            Log Out
+          </button>
           </div>
         </div>
       </div>
