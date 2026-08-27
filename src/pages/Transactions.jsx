@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { deleteTransaction } from '../features/budget/budgetSlice'
 import { CATEGORIES } from '../constants/categories'
 import { getCurrencySymbol } from '../utils/currency'
+import { exportTransactionsToCsv } from '../utils/exportCsv'
 import Styles from './Transactions.module.css'
 
 const categoryIcons = {
@@ -70,6 +71,10 @@ export const Transactions = () => {
     return 0
   })
 
+  const handleExport = () => {
+    exportTransactionsToCsv(sorted, currency)
+  }
+
   return (
     <div className={Styles.wrapper}>
       <div className={Styles.headerRow}>
@@ -77,10 +82,16 @@ export const Transactions = () => {
           <span className={Styles.eyebrow}>ACTIVITY</span>
           <h1 className={Styles.headline}>All <span className={Styles.gradientText}>Transactions</span></h1>
         </div>
-        <Link to="/add" className={Styles.addBtn}>
-          <span className="icon">add</span>
-          New Transaction
-        </Link>
+        <div className={Styles.headerActions}>
+          <button className={Styles.exportBtn} onClick={handleExport} disabled={sorted.length === 0}>
+            <span className="icon">download</span>
+            Export CSV
+          </button>
+          <Link to="/add" className={Styles.addBtn}>
+            <span className="icon">add</span>
+            New Transaction
+          </Link>
+        </div>
       </div>
 
       <div className={Styles.filterBar}>

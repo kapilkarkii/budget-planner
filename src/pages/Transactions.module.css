@@ -15,15 +15,11 @@
 
 .eyebrow {
   display: inline-block;
-  padding: 5px 12px;
-  border-radius: var(--radius-full);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  margin-bottom: 12px;
+  color: var(--text-faint);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
 }
 
 .headline {
@@ -37,6 +33,39 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.exportBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 18px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-body);
+}
+
+.exportBtn:hover:not(:disabled) {
+  border-color: var(--purple);
+  color: var(--purple);
+}
+
+.exportBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .addBtn {
@@ -100,7 +129,7 @@
 
 .searchInput:focus {
   outline: none;
-  border-color: var(--cyan);
+  border-color: var(--purple);
 }
 
 .select {
@@ -240,23 +269,11 @@
   .wrapper {
     padding: 20px 16px 40px;
   }
-}
-
-@media (max-width: 640px) {
-  .wrapper {
-    padding: 20px 16px 40px;
+  .headerActions {
+    width: 100%;
   }
-  .filterBar {
-    flex-direction: column;
-  }
-  .txRow {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .txInfo {
-    min-width: 140px;
-  }
-  .actions {
-    margin-left: auto;
+  .exportBtn, .addBtn {
+    flex: 1;
+    justify-content: center;
   }
 }
