@@ -9,7 +9,7 @@
   background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
-  padding: 14px 16px;
+  padding: 14px 18px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   z-index: 200;
   max-width: 92vw;
@@ -35,6 +35,11 @@
 .iconWrap span {
   color: #ffffff;
   font-size: 18px;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .textWrap {
@@ -52,42 +57,6 @@
 .subtitle {
   font-size: 0.75rem;
   color: var(--text-faint);
-}
-
-.updateBtn {
-  padding: 8px 16px;
-  border-radius: var(--radius-full);
-  border: none;
-  background: var(--gradient-brand);
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
-  white-space: nowrap;
-  font-family: var(--font-body);
-}
-
-.updateBtn:hover {
-  opacity: 0.9;
-}
-
-.dismissBtn {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--text-faint);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.dismissBtn:hover {
-  background: var(--surface-hover);
-  color: var(--text);
 }
 
 @media (max-width: 900px) {

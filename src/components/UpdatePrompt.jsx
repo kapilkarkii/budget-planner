@@ -1,24 +1,31 @@
 import { useRegisterSW } from 'virtual:pwa-register/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Styles from './UpdatePrompt.module.css'
 
-const CHECK_INTERVAL = 60 * 1000 // check every 60 seconds
-
 export const UpdatePrompt = () => {
+  const [showToast, setShowToast] = useState(false)
+
   const {
-    needRefresh: [needRefresh, setNeedRefresh],
+    needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
     onRegisteredSW(swUrl, registration) {
       if (!registration) return
-      // actively poll for updates instead of waiting on browser defaults
       setInterval(() => {
         registration.update()
-      }, CHECK_INTERVAL)
+      }, 60 * 1000)
     },
   })
 
-  // also check the instant the app becomes visible again (e.g. reopened from background)
+  useEffect(() => {
+    if (needRefresh) {
+      setShowToast(true)
+      updateServiceWorker(true)
+      const timer = setTimeout(() => setShowToast(false), 2500)
+      return () => clearTimeout(timer)
+    }
+  }, [needRefresh, updateServiceWorker])
+
   useEffect(() => {
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
@@ -29,15 +36,7 @@ export const UpdatePrompt = () => {
     return () => document.removeEventListener('visibilitychange', handleVisibility)
   }, [])
 
-  if (!needRefresh) return null
-
-  const handleUpdate = () => {
-    updateServiceWorker(true)
-  }
-
-  const handleDismiss = () => {
-    setNeedRefresh(false)
-  }
+  if (!showToast) return null
 
   return (
     <div className={Styles.toast}>
@@ -45,13 +44,9 @@ export const UpdatePrompt = () => {
         <span className="icon">system_update</span>
       </div>
       <div className={Styles.textWrap}>
-        <span className={Styles.title}>Update available</span>
-        <span className={Styles.subtitle}>A new version of Sable Ledger is ready.</span>
+        <span className={Styles.title}>Updating…</span>
+        <span className={Styles.subtitle}>Sable Ledger is loading the latest version.</span>
       </div>
-      <button className={Styles.updateBtn} onClick={handleUpdate}>Update</button>
-      <button className={Styles.dismissBtn} onClick={handleDismiss} aria-label="Dismiss">
-        <span className="icon">close</span>
-      </button>
     </div>
   )
 }
